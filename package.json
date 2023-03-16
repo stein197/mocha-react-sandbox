@@ -1,0 +1,29 @@
+{
+  "name": "@stein197/mocha-react-sandbox",
+  "version": "0.1.0",
+  "description": "Mocha React sandbox helper",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stein197/mocha-react-sandbox.git"
+  },
+  "keywords": [
+    "mocha",
+    "react",
+    "sandbox"
+  ],
+  "author": "Nail' Gafarov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stein197/mocha-react-sandbox/issues"
+  },
+  "homepage": "https://github.com/stein197/mocha-react-sandbox#readme",
+  "devDependencies": {
+    "jsdom": "^21.1.1"
+  },
+  "peerDependencies": {
+    "mocha": "^10.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}
