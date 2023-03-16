@@ -5,6 +5,7 @@ const React = require("react");
 const ReactDOMClient = require("react-dom/client");
 const ReactDOMTestUtils = require("react-dom/test-utils");
 const Mocker = require("./Mocker");
+const ElementFacade = require("./ElementFacade");
 
 /**
  * @template T
@@ -146,31 +147,11 @@ module.exports = class Sandbox {
 
 	/**
 	 * @param {string} selector
-	 * @returns {HTMLElement?}
+	 * @returns {ElementFacade?}
 	 */
-	select(selector) {
-		return this.__container.querySelector(selector);
-	}
-
-	/**
-	 * @param {string} selector
-	 * @param {Partial<React.SyntheticEvent>?} data
-	 * @returns {Promise<void>}
-	 */
-	click(selector, data) {
-		return this.dispatchEvent(selector, "click", data);
-	}
-
-	/**
-	 * @template {keyof typeof ReactDOMTestUtils.Simulate} K
-	 * @param {string} selector
-	 * @param {K} event
-	 * @param {Partial<React.SyntheticEvent>?} data
-	 * @returns {Promise<void>}
-	 */
-	dispatchEvent(selector, event, data) {
-		return ReactDOMTestUtils.act(() => {
-			ReactDOMTestUtils.Simulate[event](this.__container.querySelector(selector), data);
-		});
+	find(selector) {
+		const element = this.__container.querySelector(selector);
+		return element ? new ElementFacade(element) : null;
 	}
 }
+
