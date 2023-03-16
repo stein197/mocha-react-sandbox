@@ -105,7 +105,9 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__before = () => {
+		// @ts-ignore
 		this.__context.IS_REACT_ACT_ENVIRONMENT = true
+		// @ts-ignore
 		this.__mocker.mock("window", this.__dom.window);
 		for (const key of this.__contextProps)
 			this.__mocker.mock(key, this.__dom.window[key]);

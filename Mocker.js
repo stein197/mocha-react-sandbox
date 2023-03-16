@@ -43,6 +43,7 @@ module.exports = class Mocker {
 	unmock(key) {
 		if (!(key in this.__orig))
 			return;
+		// @ts-ignore
 		this.__context[key] = this.__orig[key];
 		delete this.__orig[key];
 	}
@@ -50,6 +51,7 @@ module.exports = class Mocker {
 	clean() {
 		const keys = Object.keys(this.__orig);
 		for (const key of keys)
+			// @ts-ignore
 			this.unmock(key);
 	}
 }
