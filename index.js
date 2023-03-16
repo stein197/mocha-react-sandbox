@@ -81,6 +81,40 @@ module.exports = class Sandbox {
 	}
 
 	/**
+	 * @param {React.ReactNode} node
+	 * @returns {Promise<void> | void}
+	 */
+	render(node) {
+		return ReactDOMTestUtils.act(() => {
+			if (this.__root)
+				this.__root.render(node);
+		});
+	}
+
+	/**
+	 * @param {React.ReactNode} node
+	 * @param {Promise<any>} promise
+	 */
+	async renderAsync(node, promise) {
+		await ReactDOMTestUtils.act(async () => {
+			await this.render(node);
+			try {
+				await promise;
+			} catch {}
+			await new Promise(rs => setTimeout(rs, 0));
+		});
+	}
+
+	/**
+	 * @param {string} selector
+	 * @returns {ElementFacade?}
+	 */
+	find(selector) {
+		const element = this.__container.querySelector(selector);
+		return element ? new ElementFacade(element) : null;
+	}
+
+	/**
 	 * @private
 	 */
 	__beforeEach = () => {
@@ -120,40 +154,6 @@ module.exports = class Sandbox {
 		this.__root = null;
 		this.__mocker.clean();
 		delete globalThis.IS_REACT_ACT_ENVIRONMENT;
-	}
-
-	/**
-	 * @param {React.ReactNode} node
-	 * @returns {Promise<void> | void}
-	 */
-	render(node) {
-		return ReactDOMTestUtils.act(() => {
-			if (this.__root)
-				this.__root.render(node);
-		});
-	}
-
-	/**
-	 * @param {React.ReactNode} node
-	 * @param {Promise<any>} promise
-	 */
-	async renderAsync(node, promise) {
-		await ReactDOMTestUtils.act(async () => {
-			await this.render(node);
-			try {
-				await promise;
-			} catch {}
-			await new Promise(rs => setTimeout(rs, 0));
-		});
-	}
-
-	/**
-	 * @param {string} selector
-	 * @returns {ElementFacade?}
-	 */
-	find(selector) {
-		const element = this.__container.querySelector(selector);
-		return element ? new ElementFacade(element) : null;
 	}
 }
 
