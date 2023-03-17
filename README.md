@@ -44,7 +44,3 @@ Then run:
 ```
 npx ts-mocha test.tsx
 ```
-
-## NPX scripts
-- `clean`. Clean the directory from `d.ts` files
-- `dts`. Generate `d.ts` typings

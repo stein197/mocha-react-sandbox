@@ -3,10 +3,6 @@
   "version": "0.1.0",
   "description": "Mocha React sandbox helper",
   "main": "index.js",
-  "scripts": {
-    "clean": "del .\\*.d.ts",
-    "dts": "npx -p typescript tsc index.js --allowJs --declaration --emitDeclarationOnly --removeComments --lib esnext,dom"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stein197/mocha-sandbox.git"
