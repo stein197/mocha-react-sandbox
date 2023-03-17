@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "clean": "del .\\*.d.ts",
-    "dts": "npx -p typescript tsc index.js --allowJs --declaration --emitDeclarationOnly --lib esnext,dom"
+    "dts": "npx -p typescript tsc index.js --allowJs --declaration --emitDeclarationOnly --removeComments --lib esnext,dom"
   },
   "repository": {
     "type": "git",
