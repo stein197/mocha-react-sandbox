@@ -31,7 +31,7 @@ module.exports = class Mocker {
 	 * @returns {void}
 	 */
 	mock(key, implementation) {
-		if (!this.__orig[key])
+		if (!(key in this.__orig))
 			this.__orig[key] = this.__context[key];
 		this.__context[key] = implementation;
 	}
