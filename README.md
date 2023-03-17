@@ -8,7 +8,7 @@ npm install --save-dev stein197/mocha-sandbox
 ```
 
 ## Usage
-The package requires `mocha` and `react` to be installed (and `@types/` if it's a TypeScript project).
+The package requires `mocha` and `react` to be installed (and `@types/*`, `ts-mocha` and `typescript` if it's a TypeScript project).
 ```tsx
 // test.tsx
 import "mocha";
