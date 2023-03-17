@@ -37,7 +37,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	abort(data) {
@@ -45,7 +45,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	animationEnd(data) {
@@ -53,7 +53,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	animationIteration(data) {
@@ -61,7 +61,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	animationStart(data) {
@@ -69,7 +69,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	blur(data) {
@@ -77,7 +77,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	canPlay(data) {
@@ -85,7 +85,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	canPlayThrough(data) {
@@ -93,7 +93,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	change(data) {
@@ -101,7 +101,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	click(data) {
@@ -109,7 +109,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	compositionEnd(data) {
@@ -117,7 +117,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	compositionStart(data) {
@@ -125,7 +125,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	compositionUpdate(data) {
@@ -133,7 +133,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	contextMenu(data) {
@@ -141,7 +141,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	copy(data) {
@@ -149,7 +149,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	cut(data) {
@@ -157,7 +157,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	doubleClick(data) {
@@ -165,7 +165,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	drag(data) {
@@ -173,7 +173,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	dragEnd(data) {
@@ -181,7 +181,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	dragEnter(data) {
@@ -189,7 +189,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	dragExit(data) {
@@ -197,7 +197,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	dragLeave(data) {
@@ -205,7 +205,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	dragOver(data) {
@@ -213,7 +213,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	dragStart(data) {
@@ -221,7 +221,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	drop(data) {
@@ -229,7 +229,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	durationChange(data) {
@@ -237,7 +237,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	emptied(data) {
@@ -245,7 +245,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	encrypted(data) {
@@ -253,7 +253,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	ended(data) {
@@ -261,7 +261,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	error(data) {
@@ -269,7 +269,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	focus(data) {
@@ -277,7 +277,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	input(data) {
@@ -285,7 +285,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	invalid(data) {
@@ -293,7 +293,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	keyDown(data) {
@@ -301,7 +301,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	keyPress(data) {
@@ -309,7 +309,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	keyUp(data) {
@@ -317,7 +317,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	load(data) {
@@ -325,7 +325,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	loadStart(data) {
@@ -333,7 +333,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	loadedData(data) {
@@ -341,7 +341,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	loadedMetadata(data) {
@@ -349,7 +349,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseDown(data) {
@@ -357,7 +357,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseEnter(data) {
@@ -365,7 +365,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseLeave(data) {
@@ -373,7 +373,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseMove(data) {
@@ -381,7 +381,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseOut(data) {
@@ -389,7 +389,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseOver(data) {
@@ -397,7 +397,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	mouseUp(data) {
@@ -405,7 +405,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	paste(data) {
@@ -413,7 +413,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	pause(data) {
@@ -421,7 +421,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	play(data) {
@@ -429,7 +429,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	playing(data) {
@@ -437,7 +437,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	progress(data) {
@@ -445,7 +445,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	rateChange(data) {
@@ -453,7 +453,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	scroll(data) {
@@ -461,7 +461,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	seeked(data) {
@@ -469,7 +469,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	seeking(data) {
@@ -477,7 +477,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	select(data) {
@@ -485,7 +485,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	stalled(data) {
@@ -493,7 +493,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	submit(data) {
@@ -501,7 +501,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	suspend(data) {
@@ -509,7 +509,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	timeUpdate(data) {
@@ -517,7 +517,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	touchCancel(data) {
@@ -525,7 +525,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	touchEnd(data) {
@@ -533,7 +533,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	touchMove(data) {
@@ -541,7 +541,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	touchStart(data) {
@@ -549,7 +549,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	transitionEnd(data) {
@@ -557,7 +557,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	volumeChange(data) {
@@ -565,7 +565,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	waiting(data) {
@@ -573,7 +573,7 @@ module.exports = class ElementFacade {
 	}
 
 	/**
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */
 	wheel(data) {
@@ -582,13 +582,13 @@ module.exports = class ElementFacade {
 
 	/**
 	 * @param {keyof typeof ReactDOMTestUtils.Simulate} event
-	 * @param {ReactDOMTestUtils.SyntheticEventData?} data
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 * @private
 	 */
 	__dispatchEvent(event, data) {
 		return ReactDOMTestUtils.act(async () => {
-			ReactDOMTestUtils.Simulate[event](this.__element, data ?? undefined);
+			ReactDOMTestUtils.Simulate[event](this.__element, data);
 		});
 	}
 }
