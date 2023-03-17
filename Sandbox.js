@@ -110,8 +110,15 @@ module.exports = class Sandbox {
 	 * @returns {ElementFacade?}
 	 */
 	find(selector) {
-		const element = this.__container.querySelector(selector);
-		return element ? new ElementFacade(element) : null;
+		return new ElementFacade(this.__container).find(selector);
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {ElementFacade?}
+	 */
+	findByText(text) {
+		return new ElementFacade(this.__container).findByText(text);
 	}
 
 	/**

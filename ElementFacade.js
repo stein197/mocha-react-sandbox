@@ -37,6 +37,21 @@ module.exports = class ElementFacade {
 	}
 
 	/**
+	 * @param {string} text
+	 * @returns {ElementFacade?}
+	 */
+	findByText(text) {
+		if (this.__element.textContent === text)
+			return new ElementFacade(this.__element);
+		for (const child of [...this.__element.children]) {
+			const element = new ElementFacade(child).findByText(text);
+			if (element)
+				return element;
+		}
+		return null;
+	}
+
+	/**
 	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
 	 * @returns {Promise<void>}
 	 */

@@ -33,8 +33,9 @@ sandbox(globalThis, sb => {
 			await sb.render(<Component />);
 			// Make actions
 			await sb.find("button")!.click();
+			await sb.findByText("Click me")!.click();
 			// Assert
-			assert.equal(sb.find("p")!.textContent, "Count: 1");
+			assert.equal(sb.find("p")!.textContent, "Count: 2");
 		});
 	});
 });
