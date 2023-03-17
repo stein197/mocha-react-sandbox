@@ -8,15 +8,16 @@ npm install --save-dev stein197/mocha-sandbox
 ```
 
 ## Usage
+The package requires `mocha` and `react` to be installed (and `@types/` if it's a TypeScript project).
 ```tsx
 // test.tsx
 import "mocha";
-import * as assert from "node:assert";
-import * as React from "react";
-import * as Sandbox from "@stein197/mocha-sandbox";
+import assert from "node:assert";
+import React from "react";
+import sandbox from "@stein197/mocha-sandbox";
 
-describe("Test case", () => {
-	const s = new Sandbox(globalThis);
+// Passing global context that will be mocked
+sandbox(globalThis, sb => {
 	function Component() {
 		const [count, setCount] = React.useState(0);
 		return (
@@ -26,13 +27,17 @@ describe("Test case", () => {
 			</div>
 		);
 	}
-	it("Test case 1", async () => {
-		await s.render(<Component />);
-		await s.find("button").click();
-		assert.equal(s.find("p").textContent, "Count: 1");
+	describe("Test case", () => {
+		it("Test case 1", async () => {
+			// Render the component
+			await sb.render(<Component />);
+			// Make actions
+			await sb.find("button")!.click();
+			// Assert
+			assert.equal(sb.find("p")!.textContent, "Count: 1");
+		});
 	});
 });
-
 ```
 
 Then run:
