@@ -39,3 +39,6 @@ Then run:
 ```
 npx ts-mocha test.tsx
 ```
+
+## NPX scripts
+- `dts`. Generate `d.ts` typings
