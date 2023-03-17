@@ -23,12 +23,14 @@
   },
   "homepage": "https://github.com/stein197/mocha-sandbox#readme",
   "dependencies": {
-    "@types/mocha": "10.0.1",
-    "@types/react": "18.0.28",
     "@types/react-dom": "^18.0.11",
     "jsdom": "^21.1.1",
-    "mocha": "^10.2.0",
-    "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "peerDependencies": {
+    "@types/mocha": "10.0.1",
+    "@types/react": "18.0.28",
+    "mocha": "^10.2.0",
+    "react": "^18.2.0"
   }
 }
