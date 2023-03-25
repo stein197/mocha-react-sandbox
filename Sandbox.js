@@ -101,6 +101,7 @@ module.exports = class Sandbox {
 			try {
 				await promise;
 			} catch {}
+			const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__mocker.getMocked("setTimeout") ?? globalThis.setTimeout;
 			await new Promise(rs => setTimeout(rs, 0));
 		});
 	}

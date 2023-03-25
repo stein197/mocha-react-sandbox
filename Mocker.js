@@ -48,6 +48,22 @@ module.exports = class Mocker {
 		delete this.__orig[key];
 	}
 
+	/**
+	 * @param {K} key
+	 * @returns {T[K] | null}
+	 */
+	getOriginal(key) {
+		return this.__orig[key] ?? null;
+	}
+
+	/**
+	 * @param {K} key
+	 * @returns {T[K] | null}
+	 */
+	getMocked(key) {
+		return key in this.__orig ? this.__context[key] : null;
+	}
+
 	clean() {
 		const keys = Object.keys(this.__orig);
 		for (const key of keys)
