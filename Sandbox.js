@@ -107,6 +107,14 @@ module.exports = class Sandbox {
 	}
 
 	/**
+	 * @param {() => Promise<void> | void} f
+	 * @returns {Promise<void>}
+	 */
+	async act(f) {
+		await ReactDOMTestUtils.act(f);
+	}
+
+	/**
 	 * @param {string} selector
 	 * @returns {ElementFacade?}
 	 */
