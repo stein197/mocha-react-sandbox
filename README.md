@@ -1,10 +1,10 @@
-# Mocha Sandbox
+# Test Sandbox
 The package helps to befriend Mocha, React and TypeScript together.
 
 ## Installation
 Right from the GitHub:
 ```
-npm install --save-dev stein197/mocha-sandbox
+npm install --save-dev stein197/test-sandbox
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ The package requires `mocha` and `react` to be installed (and `@types/*`, `ts-mo
 import "mocha";
 import assert from "node:assert";
 import React from "react";
-import sandbox from "@stein197/mocha-sandbox";
+import sandbox from "@stein197/test-sandbox";
 
 // Passing global context that will be mocked
 sandbox(globalThis, sb => {
