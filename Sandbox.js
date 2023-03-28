@@ -101,17 +101,20 @@ module.exports = class Sandbox {
 			try {
 				await promise;
 			} catch {}
-			const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__mocker.getMocked("setTimeout") ?? globalThis.setTimeout;
+			const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
 			await new Promise(rs => setTimeout(rs, 0));
 		});
 	}
 
 	/**
-	 * @param {() => Promise<void> | void} f
+	 * @param {React.ReactNode} node
+	 * @param {() => Promise<void>} [f]
 	 * @returns {Promise<void>}
 	 */
-	async act(f) {
-		await ReactDOMTestUtils.act(f);
+	async react(node, f) {
+		await this.render(node);
+		if (f)
+			await ReactDOMTestUtils.act(f);
 	}
 
 	/**

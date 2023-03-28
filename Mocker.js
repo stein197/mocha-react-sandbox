@@ -53,15 +53,7 @@ module.exports = class Mocker {
 	 * @returns {T[K] | null}
 	 */
 	getOriginal(key) {
-		return this.__orig[key] ?? null;
-	}
-
-	/**
-	 * @param {K} key
-	 * @returns {T[K] | null}
-	 */
-	getMocked(key) {
-		return key in this.__orig ? this.__context[key] : null;
+		return this.__orig[key] ?? this.__context[key] ?? null;
 	}
 
 	clean() {

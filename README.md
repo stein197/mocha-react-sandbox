@@ -37,6 +37,16 @@ sandbox(globalThis, sb => {
 			// Assert
 			assert.equal(sb.find("p")!.textContent, "Count: 2");
 		});
+		it("Test case 2", () => {
+			// Compose render and actions together
+			await sb.react(<Component />, async () => {
+				await sb.find("button")!.click();
+				await sb.findByText("Click me")!.click();
+				await timeout(100);
+			});
+			// Then only assert
+			assert.equal(sb.find("p")!.textContent, "Count: 2");
+		});
 	});
 });
 ```
