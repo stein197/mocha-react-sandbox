@@ -53,7 +53,7 @@ module.exports = class Sandbox {
 	 * @type {[string, ...any[]][]}
 	 * @private
 	 */
-	__commands;
+	__commands = [];
 
 	/**
 	 * @returns {string}
@@ -142,7 +142,7 @@ module.exports = class Sandbox {
 				case "simulate": {
 					const [f, event, data] = args;
 					ReactDOMTestUtils.act(() => {
-						ReactDOMTestUtils.Simulate[event](f(this), data);
+						ReactDOMTestUtils.Simulate[event](f(this).element, data);
 					});
 					break;
 				}
@@ -158,7 +158,7 @@ module.exports = class Sandbox {
 				}
 			}
 		}
-		this.__commans = [];
+		this.__commands = [];
 	}
 
 	/**

@@ -9,6 +9,13 @@ module.exports = class ElementFacade {
 	__element;
 
 	/**
+	 * @returns {HTMLElement}
+	 */
+	get element() {
+		return this.__element;
+	}
+
+	/**
 	 * @returns {string}
 	 */
 	get textContent() {
