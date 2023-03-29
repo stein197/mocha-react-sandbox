@@ -1,4 +1,5 @@
 // @ts-check
+const assert = require("node:assert");
 const mocha = require("mocha");
 const jsdom = require("jsdom");
 const React = require("react");
@@ -49,6 +50,12 @@ module.exports = class Sandbox {
 	__contextProps;
 
 	/**
+	 * @type {[string, ...any[]][]}
+	 * @private
+	 */
+	__commands;
+
+	/**
 	 * @returns {string}
 	 */
 	get textContent() {
@@ -82,39 +89,76 @@ module.exports = class Sandbox {
 
 	/**
 	 * @param {React.ReactNode} node
-	 * @returns {Promise<void> | void}
+	 * @returns {this}
 	 */
 	render(node) {
-		return ReactDOMTestUtils.act(() => {
-			if (this.__root)
-				this.__root.render(node);
-		});
+		this.__commands.push(["render", ...arguments]);
+		return this;
 	}
 
 	/**
-	 * @param {React.ReactNode} node
-	 * @param {Promise<any>} promise
+	 * @param {(sandbox: this) => ElementFacade} f
+	 * @param {keyof typeof ReactDOMTestUtils.Simulate} event
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
+	 * @returns {this}
 	 */
-	async renderAsync(node, promise) {
-		await ReactDOMTestUtils.act(async () => {
-			await this.render(node);
-			try {
-				await promise;
-			} catch {}
-			const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
-			await new Promise(rs => setTimeout(rs, 0));
-		});
+	simulate(f, event, data) {
+		this.__commands.push(["simulate", ...arguments]);
+		return this;
 	}
 
 	/**
-	 * @param {React.ReactNode} node
-	 * @param {() => Promise<void>} [f]
-	 * @returns {Promise<void>}
+	 * @template T
+	 * @param {(sandbox: this) => T} f
+	 * @param {T} actual
+	 * @returns {this}
 	 */
-	async react(node, f) {
-		await this.render(node);
-		if (f)
-			await ReactDOMTestUtils.act(f);
+	assert(f, actual) {
+		this.__commands.push(["assert", ...arguments]);
+		return this;
+	}
+
+	/**
+	 * @param {number} ms
+	 * @returns {this}
+	 */
+	timeout(ms) {
+		this.__commands.push(["timeout", ...arguments]);
+		return this;
+	}
+
+	async run() {
+		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
+		for (const [cmd, ...args] of this.__commands) {
+			switch (cmd) {
+				case "render": {
+					const [node] = args;
+					ReactDOMTestUtils.act(() => {
+						if (this.__root)
+							this.__root.render(node);
+					});
+					break;
+				}
+				case "simulate": {
+					const [f, event, data] = args;
+					ReactDOMTestUtils.act(() => {
+						ReactDOMTestUtils.Simulate[event](f(this), data);
+					});
+					break;
+				}
+				case "assert": {
+					const [f, actual] = args;
+					assert.equal(f(this), actual);
+					break;
+				}
+				case "timeout": {
+					const [ms] = args;
+					await ReactDOMTestUtils.act(() => new Promise(resolve => setTimeout(resolve, ms)));
+					break;
+				}
+			}
+		}
+		this.__commans = [];
 	}
 
 	/**
