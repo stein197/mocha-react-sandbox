@@ -182,15 +182,6 @@ module.exports = class Sandbox {
 	}
 
 	/**
-	 * @param {number} ms
-	 * @returns {this}
-	 */
-	timeout(ms) {
-		this.__commands.push(["timeout", ...arguments]);
-		return this;
-	}
-
-	/**
 	 * @private
 	 */
 	__beforeEach = () => {

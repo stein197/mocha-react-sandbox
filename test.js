@@ -16,6 +16,5 @@ sandbox(globalThis, sb => {
 	it("findByText()", () => sb.render(React.createElement(Component1)).assert(sb => sb.findByText("Click").textContent, "Click").run());
 	it("render()", () => sb.render(React.createElement(Component1)).assert(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
 	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").assert(sb => sb.find("p").textContent, "1"));
-	it.skip("timeout()", () => {});
 	it("Complex behavior", () => {});
 });
