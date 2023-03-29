@@ -152,6 +152,16 @@ module.exports = class Sandbox {
 		return this;
 	}
 
+	/**
+	 * @param {number} ms
+	 * @returns {this}
+	 */
+	timeout(ms) {
+		// @ts-ignore
+		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
+		return this.await(new Promise(resolve => setTimeout(resolve, ms)));
+	}
+
 	async run() {
 		const tracker = new assert.CallTracker();
 		let lastNode;

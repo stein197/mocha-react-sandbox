@@ -26,4 +26,5 @@ sandbox(globalThis, sb => {
 	it("render()", () => sb.render(React.createElement(Component1)).equals(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
 	it.skip("rerenders()", () => {});
 	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
+	it.skip("timeout()", () => {});
 });
