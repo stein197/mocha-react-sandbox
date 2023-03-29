@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "Test sandbox helper",
   "main": "index.js",
+  "scripts": {
+    "test": "mocha test.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stein197/test-sandbox.git"
@@ -27,5 +30,8 @@
     "@types/react": "^18.0.28",
     "mocha": "^10.2.0",
     "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0"
   }
 }
