@@ -132,37 +132,13 @@ module.exports = class Sandbox {
 		return this;
 	}
 
-	async run() {
-		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
-		for (const [cmd, ...args] of this.__commands) {
-			switch (cmd) {
-				case "render": {
-					const [node] = args;
-					ReactDOMTestUtils.act(() => {
-						if (this.__root)
-							this.__root.render(node);
-					});
-					break;
-				}
-				case "simulate": {
-					const [f, event, data] = args;
-					ReactDOMTestUtils.act(() => {
-						ReactDOMTestUtils.Simulate[event](f(this).element, data);
-					});
-					break;
-				}
-				case "assert": {
-					const [f, actual] = args;
-					assert.equal(f(this), actual);
-					break;
-				}
-				case "await": {
-					const [promise] = args;
-					await ReactDOMTestUtils.act(() => promise);
-					break;
-				}
-			}
-		}
+	/**
+	 * @param {number} count
+	 * @returns {this}
+	 */
+	rerenders(count) {
+		this.__commands.push(["rerenders", ...arguments]);
+		return this;
 	}
 
 	/**
@@ -174,6 +150,50 @@ module.exports = class Sandbox {
 	simulate(f, event, data) {
 		this.__commands.push(["simulate", ...arguments]);
 		return this;
+	}
+
+	async run() {
+		// @ts-ignore
+		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
+		const tracker = new assert.CallTracker();
+		let lastNode;
+		for (const [cmd, ...args] of this.__commands) {
+			switch (cmd) {
+				case "assert": {
+					const [f, actual] = args;
+					assert.equal(f(this), actual);
+					break;
+				}
+				case "await": {
+					const [promise] = args;
+					await ReactDOMTestUtils.act(() => promise);
+					break;
+				}
+				case "render": {
+					const [node] = args;
+					lastNode = tracker.calls(node, Infinity);
+					ReactDOMTestUtils.act(() => {
+						if (!this.__root)
+							return;
+						this.__root.unmount();
+						this.__root.render(lastNode);
+					});
+					break;
+				}
+				case "rerenders": {
+					const [count] = args;
+					assert.equal(tracker.getCalls(lastNode).length, count);
+					break;
+				}
+				case "simulate": {
+					const [f, event, data] = args;
+					ReactDOMTestUtils.act(() => {
+						ReactDOMTestUtils.Simulate[event](f(this).element, data);
+					});
+					break;
+				}
+			}
+		}
 	}
 
 	/**

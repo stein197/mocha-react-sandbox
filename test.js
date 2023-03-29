@@ -20,6 +20,7 @@ function Component2({promise}) {
 
 sandbox(globalThis, sb => {
 	it("assert()", () => sb.assert(sb => "String", "String").run());
+	it.skip("rerenders()", () => {});
 	it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).assert(sb => sb.textContent, "undefined").await(timeout(150)).assert(sb => sb.textContent, "Success").run());
 	it("find()", () => sb.render(React.createElement(Component1)).assert(sb => sb.find("p").textContent, "0").run());
 	it("findByText()", () => sb.render(React.createElement(Component1)).assert(sb => sb.findByText("Click").textContent, "Click").run());
