@@ -19,11 +19,11 @@ function Component2({promise}) {
 }
 
 sandbox(globalThis, sb => {
-	it("assert()", () => sb.assert(sb => "String", "String").run());
+	it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
+	it("equals()", () => sb.equals(sb => "String", "String").run());
+	it("find()", () => sb.render(React.createElement(Component1)).equals(sb => sb.find("p").textContent, "0").run());
+	it("findByText()", () => sb.render(React.createElement(Component1)).equals(sb => sb.findByText("Click").textContent, "Click").run());
+	it("render()", () => sb.render(React.createElement(Component1)).equals(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
 	it.skip("rerenders()", () => {});
-	it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).assert(sb => sb.textContent, "undefined").await(timeout(150)).assert(sb => sb.textContent, "Success").run());
-	it("find()", () => sb.render(React.createElement(Component1)).assert(sb => sb.find("p").textContent, "0").run());
-	it("findByText()", () => sb.render(React.createElement(Component1)).assert(sb => sb.findByText("Click").textContent, "Click").run());
-	it("render()", () => sb.render(React.createElement(Component1)).assert(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
-	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").assert(sb => sb.find("p").textContent, "1"));
+	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
 });

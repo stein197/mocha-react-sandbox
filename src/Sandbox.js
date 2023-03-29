@@ -88,22 +88,22 @@ module.exports = class Sandbox {
 	}
 
 	/**
-	 * @template T
-	 * @param {(sandbox: this) => T} f
-	 * @param {T} actual
-	 * @returns {this}
-	 */
-	assert(f, actual) {
-		this.__commands.push(["assert", ...arguments]);
-		return this;
-	}
-
-	/**
 	 * @param {Promise<any>} promise
 	 * @returns {this}
 	 */
 	await(promise) {
 		this.__commands.push(["await", promise]);
+		return this;
+	}
+
+	/**
+	 * @template T
+	 * @param {(sandbox: this) => T} f
+	 * @param {T} actual
+	 * @returns {this}
+	 */
+	equals(f, actual) {
+		this.__commands.push(["equals", ...arguments]);
 		return this;
 	}
 
@@ -153,25 +153,23 @@ module.exports = class Sandbox {
 	}
 
 	async run() {
-		// @ts-ignore
-		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
 		const tracker = new assert.CallTracker();
 		let lastNode;
 		for (const [cmd, ...args] of this.__commands) {
 			switch (cmd) {
-				case "assert": {
-					const [f, actual] = args;
-					assert.equal(f(this), actual);
-					break;
-				}
 				case "await": {
 					const [promise] = args;
 					await ReactDOMTestUtils.act(() => promise);
 					break;
 				}
+				case "equals": {
+					const [f, actual] = args;
+					assert.equal(f(this), actual);
+					break;
+				}
 				case "render": {
 					const [node] = args;
-					lastNode = tracker.calls(node, Infinity);
+					lastNode = tracker.calls(node, 1);
 					ReactDOMTestUtils.act(() => {
 						if (!this.__root)
 							return;
