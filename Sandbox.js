@@ -127,6 +127,15 @@ module.exports = class Sandbox {
 		return this;
 	}
 
+	/**
+	 * @param {Promise<any>} promise
+	 * @returns {this}
+	 */
+	await(promise) {
+		this.__commands.push(["await", promise]);
+		return this;
+	}
+
 	async run() {
 		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
 		for (const [cmd, ...args] of this.__commands) {
@@ -154,6 +163,11 @@ module.exports = class Sandbox {
 				case "timeout": {
 					const [ms] = args;
 					await ReactDOMTestUtils.act(() => new Promise(resolve => setTimeout(resolve, ms)));
+					break;
+				}
+				case "await": {
+					const [promise] = args;
+					await promise;
 					break;
 				}
 			}
@@ -189,7 +203,8 @@ module.exports = class Sandbox {
 	/**
 	 * @private
 	 */
-	__afterEach = () => {
+	__afterEach = async () => {
+		await this.run();
 		ReactDOMTestUtils.act(() => {
 			if (!this.__root)
 				return;
