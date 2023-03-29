@@ -46,3 +46,6 @@ Then run:
 ```
 npx ts-mocha test.tsx
 ```
+
+## NPM scripts
+- `test`. Run unit testing
