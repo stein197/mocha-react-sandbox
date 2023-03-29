@@ -1,4 +1,4 @@
-const Sandbox = require("./Sandbox");
+const Sandbox = require("./src/Sandbox");
 
 /**
  * @template {object} T
