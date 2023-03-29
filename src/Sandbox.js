@@ -156,14 +156,9 @@ module.exports = class Sandbox {
 					assert.equal(f(this), actual);
 					break;
 				}
-				case "timeout": {
-					const [ms] = args;
-					await ReactDOMTestUtils.act(() => new Promise(resolve => setTimeout(resolve, ms)));
-					break;
-				}
 				case "await": {
 					const [promise] = args;
-					await promise;
+					await ReactDOMTestUtils.act(() => promise);
 					break;
 				}
 			}
@@ -194,7 +189,6 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__afterEach = async () => {
-		// await this.__run();
 		this.__commands = [];
 		ReactDOMTestUtils.act(() => {
 			if (!this.__root)
