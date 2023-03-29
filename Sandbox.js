@@ -136,7 +136,26 @@ module.exports = class Sandbox {
 		return this;
 	}
 
-	async run() {
+	/**
+	 * @param {string} selector
+	 * @returns {ElementFacade?}
+	 */
+	find(selector) {
+		return new ElementFacade(this.__container).find(selector);
+	}
+
+	/**
+	 * @param {string} text
+	 * @returns {ElementFacade?}
+	 */
+	findByText(text) {
+		return new ElementFacade(this.__container).findByText(text);
+	}
+
+	/**
+	 * @private
+	 */
+	async __run() {
 		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
 		for (const [cmd, ...args] of this.__commands) {
 			switch (cmd) {
@@ -172,23 +191,6 @@ module.exports = class Sandbox {
 				}
 			}
 		}
-		this.__commands = [];
-	}
-
-	/**
-	 * @param {string} selector
-	 * @returns {ElementFacade?}
-	 */
-	find(selector) {
-		return new ElementFacade(this.__container).find(selector);
-	}
-
-	/**
-	 * @param {string} text
-	 * @returns {ElementFacade?}
-	 */
-	findByText(text) {
-		return new ElementFacade(this.__container).findByText(text);
 	}
 
 	/**
@@ -204,7 +206,8 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__afterEach = async () => {
-		await this.run();
+		await this.__run();
+		this.__commands = [];
 		ReactDOMTestUtils.act(() => {
 			if (!this.__root)
 				return;
