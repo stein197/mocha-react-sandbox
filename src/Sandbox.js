@@ -88,26 +88,6 @@ module.exports = class Sandbox {
 	}
 
 	/**
-	 * @param {React.ReactNode} node
-	 * @returns {this}
-	 */
-	render(node) {
-		this.__commands.push(["render", ...arguments]);
-		return this;
-	}
-
-	/**
-	 * @param {(sandbox: this) => ElementFacade} f
-	 * @param {keyof typeof ReactDOMTestUtils.Simulate} event
-	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
-	 * @returns {this}
-	 */
-	simulate(f, event, data) {
-		this.__commands.push(["simulate", ...arguments]);
-		return this;
-	}
-
-	/**
 	 * @template T
 	 * @param {(sandbox: this) => T} f
 	 * @param {T} actual
@@ -115,15 +95,6 @@ module.exports = class Sandbox {
 	 */
 	assert(f, actual) {
 		this.__commands.push(["assert", ...arguments]);
-		return this;
-	}
-
-	/**
-	 * @param {number} ms
-	 * @returns {this}
-	 */
-	timeout(ms) {
-		this.__commands.push(["timeout", ...arguments]);
 		return this;
 	}
 
@@ -153,9 +124,15 @@ module.exports = class Sandbox {
 	}
 
 	/**
-	 * @private
+	 * @param {React.ReactNode} node
+	 * @returns {this}
 	 */
-	async __run() {
+	render(node) {
+		this.__commands.push(["render", ...arguments]);
+		return this;
+	}
+
+	async run() {
 		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
 		for (const [cmd, ...args] of this.__commands) {
 			switch (cmd) {
@@ -194,6 +171,26 @@ module.exports = class Sandbox {
 	}
 
 	/**
+	 * @param {(sandbox: this) => ElementFacade} f
+	 * @param {keyof typeof ReactDOMTestUtils.Simulate} event
+	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
+	 * @returns {this}
+	 */
+	simulate(f, event, data) {
+		this.__commands.push(["simulate", ...arguments]);
+		return this;
+	}
+
+	/**
+	 * @param {number} ms
+	 * @returns {this}
+	 */
+	timeout(ms) {
+		this.__commands.push(["timeout", ...arguments]);
+		return this;
+	}
+
+	/**
 	 * @private
 	 */
 	__beforeEach = () => {
@@ -206,7 +203,7 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__afterEach = async () => {
-		await this.__run();
+		// await this.__run();
 		this.__commands = [];
 		ReactDOMTestUtils.act(() => {
 			if (!this.__root)

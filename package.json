@@ -3,9 +3,6 @@
   "version": "0.1.0",
   "description": "Test sandbox helper",
   "main": "index.js",
-  "scripts": {
-    "test": "mocha test.jsx"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stein197/test-sandbox.git"
