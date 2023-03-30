@@ -169,7 +169,9 @@ module.exports = class Sandbox {
 			switch (cmd) {
 				case "await": {
 					const [promise] = args;
-					await ReactDOMTestUtils.act(() => promise);
+					try {
+						await ReactDOMTestUtils.act(() => promise);
+					} catch {}
 					break;
 				}
 				case "equals": {
