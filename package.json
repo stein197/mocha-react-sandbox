@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/stein197/test-sandbox.git"
+    "url": "git+https://github.com/stein197/js-test-sandbox.git"
   },
   "keywords": [
     "test",
@@ -17,9 +17,9 @@
   "author": "Nail' Gafarov",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/stein197/test-sandbox/issues"
+    "url": "https://github.com/stein197/js-test-sandbox/issues"
   },
-  "homepage": "https://github.com/stein197/test-sandbox#readme",
+  "homepage": "https://github.com/stein197/js-test-sandbox#readme",
   "dependencies": {
     "@types/react-dom": "^18.0.11",
     "jsdom": "^21.1.1",

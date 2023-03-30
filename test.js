@@ -18,6 +18,12 @@ function Component2({promise}) {
 	return React.createElement("div", null, String(state));
 }
 
+function Component3() {
+	const [state, setState] = React.useState(0);
+	React.useEffect(() => void setTimeout(() => setState(1), 100), []);
+	return React.createElement("p", null, state);
+}
+
 sandbox(globalThis, sb => {
 	it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
 	it("equals()", () => sb.equals(sb => "String", "String").run());
@@ -26,5 +32,5 @@ sandbox(globalThis, sb => {
 	it("render()", () => sb.render(React.createElement(Component1)).equals(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
 	it("rerenders()", () => sb.render(React.createElement(Component1)).rerenders(1).simulate(sb => sb.find("button"), "click").rerenders(2).run());
 	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
-	it.skip("timeout()", () => {});
+	it("timeout()", () => sb.render(React.createElement(Component3)).equals(sb => sb.find("p").textContent, "0").timeout(150).equals(sb => sb.find("p").textContent, "1").run());
 });

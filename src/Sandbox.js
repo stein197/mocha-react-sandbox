@@ -184,9 +184,7 @@ module.exports = class Sandbox {
 					ReactDOMTestUtils.act(() => {
 						if (!this.__root)
 							return;
-						const children = node.props.children ?? [];
-						delete node.props.children;
-						this.__root.render(React.createElement(lastTracker.f, node.props, ...children));
+						this.__root.render(React.createElement(lastTracker.f, node.props));
 					});
 					break;
 				}

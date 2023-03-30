@@ -29,14 +29,15 @@ sandbox(globalThis, sb => {
 	}
 	describe("Test case", () => {
 		it("Test case 1", () => {
-			return sb
+			return sb                                                             // Returns a promise
 				.render(<Component />)                                            // Render a component
 				.simulate(sb => sb.find("button"), "click")                       // Simulate event
 				.await(timeout(100))                                              // Wait for promise to resolve
 				.equals(sb => sb.find("p")!.textContent, "Count: 1")              // Run assertion
 				.simulate(sb => sb.findByText("Click me"), "click")               // Fire one more event
 				.assert(sb => sb.findByText("Click me")!.textContent, "Count: 2") // One more assertion
-				.run()                                                            // Run all previously defined actions
+				.rerenders(3)                                                     // Assert for an expected amount of rerenders (including the first one)
+				.run()                                                            // Run all previously defined actions. Always needs to run at the end
 		});
 	});
 });
