@@ -31,6 +31,7 @@ sandbox(globalThis, sb => {
 				.render(<Component />)                                            // Render the component
 				.simulate(sb => sb.find("button"), "click")                       // Simulate an event
 				.await(timeout(100))                                              // Wait for the promise to resolve
+				.timeout(100)                                                     // Wait for specified amount of milliseconds
 				.equals(sb => sb.find("p")!.textContent, "Count: 1")              // Run an assertion
 				.simulate(sb => sb.findByText("Click me"), "click")               // Fire one more event
 				.assert(sb => sb.findByText("Click me")!.textContent, "Count: 2") // One more assertion
