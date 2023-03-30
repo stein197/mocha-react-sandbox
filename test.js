@@ -24,7 +24,7 @@ sandbox(globalThis, sb => {
 	it("find()", () => sb.render(React.createElement(Component1)).equals(sb => sb.find("p").textContent, "0").run());
 	it("findByText()", () => sb.render(React.createElement(Component1)).equals(sb => sb.findByText("Click").textContent, "Click").run());
 	it("render()", () => sb.render(React.createElement(Component1)).equals(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
-	it.skip("rerenders()", () => {});
+	it("rerenders()", () => sb.render(React.createElement(Component1)).rerenders(1).simulate(sb => sb.find("button"), "click").rerenders(2).run());
 	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
 	it.skip("timeout()", () => {});
 });

@@ -7,6 +7,7 @@ const ReactDOMClient = require("react-dom/client");
 const ReactDOMTestUtils = require("react-dom/test-utils");
 const Mocker = require("./Mocker");
 const ElementFacade = require("./ElementFacade");
+const util = require("./util");
 
 /**
  * @template T
@@ -163,8 +164,7 @@ module.exports = class Sandbox {
 	}
 
 	async run() {
-		const tracker = new assert.CallTracker();
-		let lastNode;
+		let lastTracker;
 		for (const [cmd, ...args] of this.__commands) {
 			switch (cmd) {
 				case "await": {
@@ -179,18 +179,22 @@ module.exports = class Sandbox {
 				}
 				case "render": {
 					const [node] = args;
-					lastNode = tracker.calls(node, 1);
+					const nodeType = node.type;
+					lastTracker = util.track(nodeType);
 					ReactDOMTestUtils.act(() => {
 						if (!this.__root)
 							return;
-						this.__root.unmount();
-						this.__root.render(lastNode);
+						const children = node.props.children ?? [];
+						delete node.props.children;
+						this.__root.render(React.createElement(lastTracker.f, node.props, ...children));
 					});
 					break;
 				}
 				case "rerenders": {
+					if (!lastTracker)
+						continue;
 					const [count] = args;
-					assert.equal(tracker.getCalls(lastNode).length, count);
+					assert.equal(lastTracker.calls, count, `Expected rerenders: ${count}, actual: ${lastTracker.calls}`);
 					break;
 				}
 				case "simulate": {
