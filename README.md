@@ -11,8 +11,6 @@ npm install --save-dev stein197/test-sandbox
 The package requires `mocha` and `react` to be installed (and `@types/*`, `ts-mocha` and `typescript` if it's a TypeScript project).
 ```tsx
 // test.tsx
-import "mocha";
-import assert from "node:assert";
 import React from "react";
 import sandbox from "@stein197/test-sandbox";
 
@@ -29,11 +27,11 @@ sandbox(globalThis, sb => {
 	}
 	describe("Test case", () => {
 		it("Test case 1", () => {
-			return sb                                                             // Returns a promise
-				.render(<Component />)                                            // Render a component
-				.simulate(sb => sb.find("button"), "click")                       // Simulate event
-				.await(timeout(100))                                              // Wait for promise to resolve
-				.equals(sb => sb.find("p")!.textContent, "Count: 1")              // Run assertion
+			return sb                                                             // Return a promise
+				.render(<Component />)                                            // Render the component
+				.simulate(sb => sb.find("button"), "click")                       // Simulate an event
+				.await(timeout(100))                                              // Wait for the promise to resolve
+				.equals(sb => sb.find("p")!.textContent, "Count: 1")              // Run an assertion
 				.simulate(sb => sb.findByText("Click me"), "click")               // Fire one more event
 				.assert(sb => sb.findByText("Click me")!.textContent, "Count: 2") // One more assertion
 				.rerenders(3)                                                     // Assert for an expected amount of rerenders (including the first one)
