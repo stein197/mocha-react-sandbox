@@ -98,6 +98,15 @@ module.exports = class Sandbox {
 	}
 
 	/**
+	 * @param {() => void | Promise<void>} f
+	 * @returns {this}
+	 */
+	do(f) {
+		this.__commands.push(["do", f]);
+		return this;
+	}
+
+	/**
 	 * @template T
 	 * @param {(sandbox: this) => T} f
 	 * @param {T} actual
@@ -170,6 +179,11 @@ module.exports = class Sandbox {
 				case "await": {
 					const [promise] = args;
 					await ReactDOMTestUtils.act(() => promise.then(() => {}).catch(() => {}));
+					break;
+				}
+				case "do": {
+					const [f] = args;
+					await ReactDOMTestUtils.act(f);
 					break;
 				}
 				case "equals": {
