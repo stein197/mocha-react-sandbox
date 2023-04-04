@@ -15,7 +15,7 @@ import React from "react";
 import sandbox from "@stein197/test-sandbox";
 
 // Passing global context that will be mocked
-sandbox(globalThis, sb => {
+sandbox.go(globalThis, sb => {
 	function Component() {
 		const [count, setCount] = React.useState(0);
 		return (
@@ -40,6 +40,14 @@ sandbox(globalThis, sb => {
 				.run()                                                            // Run all previously defined actions. Always needs to run at the end
 		});
 	});
+});
+it("Track a function", () => {
+	const tracker = sandbox.track((a, b) => a + b);
+	tracker.f(1, 2); // 3
+	assert.equal(tracker.calls, 1);
+	assert.equal(tracker.info, [
+		[1, 2], 3
+	]);
 });
 ```
 
