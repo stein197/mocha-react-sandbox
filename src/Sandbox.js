@@ -8,6 +8,7 @@ const ReactDOMTestUtils = require("react-dom/test-utils");
 const Mocker = require("./Mocker");
 const ElementFacade = require("./ElementFacade");
 const util = require("./util");
+
 /**
  * @template T
  */
@@ -50,10 +51,16 @@ module.exports = class Sandbox {
 	__contextProps;
 
 	/**
-	 * @type {[string, ...any[]][]}
+	 * @type {[name: string, args: any[]][]}
 	 * @private
 	 */
-	__commands = [];
+	__cmdArray = [];
+
+	/**
+	 * @type {number}
+	 * @private
+	 */
+	__curCmdIdx = -1;
 
 	/**
 	 * @returns {string}
@@ -92,8 +99,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	await(promise) {
-		this.__commands.push(["await", promise]);
-		return this;
+		return this.__addCmd("await", [promise]);
 	}
 
 	/**
@@ -101,8 +107,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	do(f) {
-		this.__commands.push(["do", f]);
-		return this;
+		return this.__addCmd("do", [f]);
 	}
 
 	/**
@@ -112,8 +117,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	equals(f, actual) {
-		this.__commands.push(["equals", ...arguments]);
-		return this;
+		return this.__addCmd("equals", [f, actual]);
 	}
 
 	/**
@@ -137,8 +141,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	render(node) {
-		this.__commands.push(["render", ...arguments]);
-		return this;
+		return this.__addCmd("render", [node]);
 	}
 
 	/**
@@ -146,8 +149,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	rerenders(count) {
-		this.__commands.push(["rerenders", ...arguments]);
-		return this;
+		return this.__addCmd("rerenders", [count]);
 	}
 
 	/**
@@ -157,8 +159,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	simulate(f, event, data) {
-		this.__commands.push(["simulate", ...arguments]);
-		return this;
+		return this.__addCmd("simulate", [f, event, data]);
 	}
 
 	/**
@@ -173,7 +174,8 @@ module.exports = class Sandbox {
 
 	async run() {
 		let lastTracker;
-		for (const [cmd, ...args] of this.__commands) {
+		for (let i = 0, [cmd, args] = this.__cmdArray[i]; i < this.__cmdArray.length; i++) {
+			this.__curCmdIdx = i;
 			switch (cmd) {
 				case "await": {
 					const [promise] = args;
@@ -217,6 +219,23 @@ module.exports = class Sandbox {
 				}
 			}
 		}
+		this.__curCmdIdx = -1;
+	}
+
+	/**
+	 * @param {string} cmd
+	 * @param {any[]} args
+	 * @returns {this}
+	 */
+	__addCmd(cmd, args) {
+		if (this.__curCmdIdx < 0) {
+			this.__cmdArray.push([cmd, args]);
+			return this;
+		}
+		const [curCmd] = this.__cmdArray[this.__curCmdIdx];
+		if (curCmd === "do")
+			this.__cmdArray.splice(this.__curCmdIdx, 0, [cmd, args]);
+		return this;
 	}
 
 	/**
