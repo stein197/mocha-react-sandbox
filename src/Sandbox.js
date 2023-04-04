@@ -173,7 +173,7 @@ module.exports = class Sandbox {
 	}
 
 	async run() {
-		let lastTracker;
+		let tracker;
 		for (let i = 0, [cmd, args] = this.__cmdArray[i]; i < this.__cmdArray.length; i++) {
 			this.__curCmdIdx = i;
 			switch (cmd) {
@@ -195,19 +195,19 @@ module.exports = class Sandbox {
 				case "render": {
 					const [node] = args;
 					const nodeType = node.type;
-					lastTracker = util.track(nodeType);
+					tracker = util.track(nodeType);
 					ReactDOMTestUtils.act(() => {
 						if (!this.__root)
 							return;
-						this.__root.render(React.createElement(lastTracker.f, node.props));
+						this.__root.render(React.createElement(tracker.f, node.props));
 					});
 					break;
 				}
 				case "rerenders": {
-					if (!lastTracker)
+					if (!tracker)
 						continue;
 					const [count] = args;
-					assert.equal(lastTracker.calls, count, `Expected rerenders: ${count}, actual: ${lastTracker.calls}`);
+					assert.equal(tracker.calls, count, `Expected rerenders: ${count}, actual: ${tracker.calls}`);
 					break;
 				}
 				case "simulate": {
