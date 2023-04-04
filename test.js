@@ -26,6 +26,10 @@ function Component3() {
 
 sandbox(globalThis, sb => {
 	it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
+	it("do()", () => {
+		let a = 0;
+		return sb.render(React.createElement(Component1)).do(() => a++).equals(() => a, 1).run();
+	});
 	it("equals()", () => sb.equals(sb => "String", "String").run());
 	it("find()", () => sb.render(React.createElement(Component1)).equals(sb => sb.find("p").textContent, "0").run());
 	it("findByText()", () => sb.render(React.createElement(Component1)).equals(sb => sb.findByText("Click").textContent, "Click").run());
