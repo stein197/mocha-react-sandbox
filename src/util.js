@@ -1,20 +1,26 @@
 /**
- * @template {(...args: any[]) => any} T
- * @param {T} f
+ * @template {any[]} T
+ * @template U
+ * @param {(...args: T) => U} f
  * @returns {{
+ * 	readonly info: [T, U][];
  * 	readonly calls: number;
- * 	f: T;
+ * 	readonly f(...args: T): U;
  * }}
  */
 exports.track = function track(f) {
-	let calls = 0;
+	const info = [];
 	return {
+		get info() {
+			return info;
+		},
 		get calls() {
-			return calls;
+			return info.length;
 		},
 		f(...args) {
-			calls++;
-			return f(...args);
+			const result = f(...args);
+			info.push([args, result]);
+			return result;
 		}
 	}
 }

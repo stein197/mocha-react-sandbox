@@ -8,7 +8,6 @@ const ReactDOMTestUtils = require("react-dom/test-utils");
 const Mocker = require("./Mocker");
 const ElementFacade = require("./ElementFacade");
 const util = require("./util");
-
 /**
  * @template T
  */

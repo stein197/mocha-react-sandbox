@@ -1,4 +1,5 @@
 const Sandbox = require("./src/Sandbox");
+const util = require("./src/util");
 
 /**
  * @template {object} T
@@ -6,7 +7,9 @@ const Sandbox = require("./src/Sandbox");
  * @param {(sb: Sandbox<T>) => void} cb
  * @returns {void}
  */
-module.exports = function sandbox(context, cb) {
+exports.go = function go(context, cb) {
 	const sb = new Sandbox(context);
 	cb(sb);
 }
+
+exports.track = util.track;

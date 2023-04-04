@@ -1,3 +1,4 @@
+const assert = require("node:assert");
 const React = require("react");
 const sandbox = require(".");
 
@@ -24,17 +25,48 @@ function Component3() {
 	return React.createElement("p", null, state);
 }
 
-sandbox(globalThis, sb => {
-	it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
-	it("do()", () => {
-		let a = 0;
-		return sb.render(React.createElement(Component1)).do(() => a++).equals(() => a, 1).run();
+sandbox.go(globalThis, sb => {
+	describe("go()", () => {
+		it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
+		it("do()", () => {
+			let a = 0;
+			return sb.render(React.createElement(Component1)).do(() => a++).equals(() => a, 1).run();
+		});
+		it("equals()", () => sb.equals(sb => "String", "String").run());
+		it("find()", () => sb.render(React.createElement(Component1)).equals(sb => sb.find("p").textContent, "0").run());
+		it("findByText()", () => sb.render(React.createElement(Component1)).equals(sb => sb.findByText("Click").textContent, "Click").run());
+		it("render()", () => sb.render(React.createElement(Component1)).equals(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
+		it("rerenders()", () => sb.render(React.createElement(Component1)).rerenders(1).simulate(sb => sb.find("button"), "click").rerenders(2).run());
+		it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
+		it("timeout()", () => sb.render(React.createElement(Component3)).equals(sb => sb.find("p").textContent, "0").timeout(150).equals(sb => sb.find("p").textContent, "1").run());
 	});
-	it("equals()", () => sb.equals(sb => "String", "String").run());
-	it("find()", () => sb.render(React.createElement(Component1)).equals(sb => sb.find("p").textContent, "0").run());
-	it("findByText()", () => sb.render(React.createElement(Component1)).equals(sb => sb.findByText("Click").textContent, "Click").run());
-	it("render()", () => sb.render(React.createElement(Component1)).equals(sb => sb.innerHTML, "<p>0</p><button>Click</button>").run());
-	it("rerenders()", () => sb.render(React.createElement(Component1)).rerenders(1).simulate(sb => sb.find("button"), "click").rerenders(2).run());
-	it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
-	it("timeout()", () => sb.render(React.createElement(Component3)).equals(sb => sb.find("p").textContent, "0").timeout(150).equals(sb => sb.find("p").textContent, "1").run());
+});
+
+describe("track()", () => {
+	it("Should correctly track the number of calls", () => {
+		const track = sandbox.track(() => {});
+		assert.equal(track.calls, 0);
+		track.f();
+		assert.equal(track.calls, 1);
+		track.f();
+		track.f();
+		assert.equal(track.calls, 3);
+	});
+	it("Should correctly record all calls", () => {
+		const f = (a, b) => a + b;
+		const track = sandbox.track(f);
+		track.f(1, 2);
+		track.f(3, 4);
+		track.f(5, 6);
+		assert.deepStrictEqual(track.info, [
+			[[1, 2], 3],
+			[[3, 4], 7],
+			[[5, 6], 11],
+		]);
+	});
+	it("Tracked function should do exactly the same as the original function", () => {
+		const f = (a, b) => a + b;
+		const track = sandbox.track(f);
+		assert.equal(track.f(1, 2), 3);
+	});
 });
