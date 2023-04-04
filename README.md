@@ -35,7 +35,6 @@ sandbox.go(globalThis, sb => {
 				.timeout(100)                                                     // Wait for specified amount of milliseconds
 				.equals(sb => sb.find("p")!.textContent, "Count: 1")              // Run an assertion
 				.simulate(sb => sb.findByText("Click me"), "click")               // Fire one more event
-				.assert(sb => sb.findByText("Click me")!.textContent, "Count: 2") // One more assertion
 				.rerenders(3)                                                     // Assert for an expected amount of rerenders (including the first one)
 				.run()                                                            // Run all previously defined actions. Always needs to run at the end
 		});
