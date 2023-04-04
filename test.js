@@ -32,9 +32,6 @@ sandbox.go(globalThis, sb => {
 			let a = 0;
 			return sb.render(React.createElement(Component1)).do(() => a++).equals(() => a, 1).run();
 		});
-		it("do() can do inner calls to the sandbox", () => {
-			return sb.render(React.createElement(Component1)).do(() => sb.simulate(sb => sb.find("button"), "click")).equals(sb => sb.find("p").textContent, 1).run();
-		});
 		it("equals()", () => sb.equals(sb => "String", "String").run());
 		it("find()", () => sb.render(React.createElement(Component1)).equals(sb => sb.find("p").textContent, "0").run());
 		it("findByText()", () => sb.render(React.createElement(Component1)).equals(sb => sb.findByText("Click").textContent, "Click").run());

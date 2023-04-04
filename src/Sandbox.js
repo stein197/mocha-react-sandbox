@@ -57,12 +57,6 @@ module.exports = class Sandbox {
 	__cmdArray = [];
 
 	/**
-	 * @type {number}
-	 * @private
-	 */
-	__curCmdIdx = -1;
-
-	/**
 	 * @returns {string}
 	 */
 	get textContent() {
@@ -174,8 +168,8 @@ module.exports = class Sandbox {
 
 	async run() {
 		let tracker;
-		for (let i = 0, [cmd, args] = this.__cmdArray[i]; i < this.__cmdArray.length; i++) {
-			this.__curCmdIdx = i;
+		for (let i = 0; i < this.__cmdArray.length; i++) {
+			const [cmd, args] = this.__cmdArray[i];
 			switch (cmd) {
 				case "await": {
 					const [promise] = args;
@@ -219,7 +213,6 @@ module.exports = class Sandbox {
 				}
 			}
 		}
-		this.__curCmdIdx = -1;
 	}
 
 	/**
@@ -228,13 +221,7 @@ module.exports = class Sandbox {
 	 * @returns {this}
 	 */
 	__addCmd(cmd, args) {
-		if (this.__curCmdIdx < 0) {
-			this.__cmdArray.push([cmd, args]);
-			return this;
-		}
-		const [curCmd] = this.__cmdArray[this.__curCmdIdx];
-		if (curCmd === "do")
-			this.__cmdArray.splice(this.__curCmdIdx, 0, [cmd, args]);
+		this.__cmdArray.push([cmd, args]);
 		return this;
 	}
 
@@ -251,7 +238,7 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__afterEach = async () => {
-		this.__commands = [];
+		this.__cmdArray = [];
 		ReactDOMTestUtils.act(() => {
 			if (!this.__root)
 				return;
