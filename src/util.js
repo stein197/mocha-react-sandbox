@@ -3,7 +3,7 @@
  * @template U
  * @param {(...args: T) => U} f
  * @returns {{
- * 	readonly info: [T, U][];
+ * 	readonly info: [args: T, result: U][];
  * 	readonly calls: number;
  * 	readonly f(...args: T): U;
  * }}
