@@ -19,10 +19,18 @@ module.exports = class Mocker {
 	__context;
 
 	/**
-	 * @param {T} context
+	 * @type {boolean}
+	 * @private
 	 */
-	constructor(context) {
+	__forbidExisting;
+
+	/**
+	 * @param {T} context
+	 * @param {boolean} forbidExisting
+	 */
+	constructor(context, forbidExisting = true) {
 		this.__context = context;
+		this.__forbidExisting = forbidExisting
 	}
 
 	/**
@@ -31,9 +39,15 @@ module.exports = class Mocker {
 	 * @returns {void}
 	 */
 	mock(key, implementation) {
+		if (this.__forbidExisting && key in this.__context)
+			return;
 		if (!(key in this.__orig))
 			this.__orig[key] = this.__context[key];
-		this.__context[key] = implementation;
+		try {
+			this.__context[key] = implementation;
+		} catch {
+			delete this.__orig[key];
+		}
 	}
 
 	/**
@@ -41,11 +55,14 @@ module.exports = class Mocker {
 	 * @returns {void}
 	 */
 	unmock(key) {
-		if (!(key in this.__orig))
+		if (!(key in this.__orig) || this.__forbidExisting && key in this.__context)
 			return;
-		// @ts-ignore
-		this.__context[key] = this.__orig[key];
-		delete this.__orig[key];
+		try {
+			// @ts-ignore
+			this.__context[key] = this.__orig[key];
+		} finally {
+			delete this.__orig[key];
+		}
 	}
 
 	/**

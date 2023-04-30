@@ -40,6 +40,14 @@ sandbox.go(globalThis, sb => {
 		it("simulate()", () => sb.render(React.createElement(Component1)).simulate(sb => sb.find("button"), "click").equals(sb => sb.find("p").textContent, "1"));
 		it("timeout()", () => sb.render(React.createElement(Component3)).equals(sb => sb.find("p").textContent, "0").timeout(150).equals(sb => sb.find("p").textContent, "1").run());
 	});
+	it("Should override Window APIs", () => {
+		try {
+			File;
+			assert.ok(true);
+		} catch {
+			assert.fail();
+		}
+	});
 });
 
 describe("track()", () => {

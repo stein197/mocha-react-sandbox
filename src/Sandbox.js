@@ -81,7 +81,7 @@ module.exports = class Sandbox {
 		});
 		this.__container = this.__dom.window.document.createElement("div");
 		this.__dom.window.document.body.appendChild(this.__container);
-		this.__contextProps = Object.keys(this.__dom.window);
+		this.__contextProps = Object.getOwnPropertyNames(this.__dom.window);
 		mocha.before(this.__before);
 		mocha.after(this.__after);
 		mocha.beforeEach(this.__beforeEach);
