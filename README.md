@@ -33,6 +33,7 @@ sandbox.go(globalThis, sb => {
 				.await(timeout(100))                                              // Wait for the promise to resolve
 				.do(() => 1 + 1)                                                  // Perform custom actions between others
 				.timeout(100)                                                     // Wait for specified amount of milliseconds
+				.upload(sb => sb.find("input[type=file]"), "./file.txt")          // Upload a custom file from a working directory
 				.equals(sb => sb.find("p")!.textContent, "Count: 1")              // Run an assertion
 				.simulate(sb => sb.findByText("Click me"), "click")               // Fire one more event
 				.rerenders(3)                                                     // Assert for an expected amount of rerenders (including the first one)

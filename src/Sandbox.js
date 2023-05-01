@@ -1,8 +1,11 @@
 // @ts-check
 const assert = require("node:assert");
+const fs = require("node:fs");
+const path = require("node:path");
 const mocha = require("mocha");
 const jsdom = require("jsdom");
 const React = require("react");
+const mimeTypes = require("mime-types");
 const ReactDOMClient = require("react-dom/client");
 const ReactDOMTestUtils = require("react-dom/test-utils");
 const Mocker = require("./Mocker");
@@ -175,6 +178,15 @@ module.exports = class Sandbox {
 		return this.await(new Promise(resolve => setTimeout(resolve, ms)));
 	}
 
+	/**
+	 * @param {(sandbox: this) => ElementFacade} f
+	 * @param {string[]} paths
+	 * @returns {this}
+	 */
+	upload(f, ...paths) {
+		return this.__addCmd("upload", [f, paths]);
+	}
+
 	async run() {
 		let tracker;
 		for (let i = 0; i < this.__cmdArray.length; i++) {
@@ -218,6 +230,27 @@ module.exports = class Sandbox {
 					ReactDOMTestUtils.act(() => {
 						ReactDOMTestUtils.Simulate[event](f(this).element, data);
 					});
+					break;
+				}
+				case "upload": {
+					const [f, paths] = args;
+					const facade = f(this);
+					if (!facade)
+						continue;
+					const input = facade.element;
+					const fileList = [];
+					for (const p of paths) {
+						const stat = fs.statSync(p);
+						fileList.push(new this.__dom.window.File([fs.readFileSync(p)], path.basename(p), {
+							lastModified: stat.mtimeMs,
+							type: mimeTypes.lookup(p) || ""
+						}));
+					}
+					Object.setPrototypeOf(fileList, this.__dom.window.FileList.prototype);
+					Object.defineProperty(input, "files", {
+						value: fileList
+					});
+					input.dispatchEvent(new this.__dom.window.Event("change"));
 					break;
 				}
 			}

@@ -23,6 +23,7 @@
   "dependencies": {
     "@types/react-dom": "^18.0.11",
     "jsdom": "^21.1.1",
+    "mime-types": "^2.1.35",
     "react-dom": "^18.2.0"
   },
   "peerDependencies": {

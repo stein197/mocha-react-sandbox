@@ -47,6 +47,20 @@ sandbox.go(globalThis, sb => {
 			assert.fail();
 		}
 	});
+	describe("upload()", () => {
+		it("Should correctly upload a single file", async () => {
+			document.body.innerHTML = "<input type=\"file\" />";
+			await sb.upload(sb => sb.find("input"), "test.js").run();
+			assert.equal(sb.dom.window.document.querySelector("input").files.length, 1);
+			assert.deepStrictEqual(sb.dom.window.document.querySelector("input").files[0].name, "test.js");
+		});
+		it("Should correctly upload an array of files", async () => {
+			document.body.innerHTML = "<input type=\"file\" />";
+			await sb.upload(sb => sb.find("input"), "test.js", "index.js").run();
+			assert.equal(sb.dom.window.document.querySelector("input").files.length, 2);
+			assert.deepStrictEqual(sb.dom.window.document.querySelector("input").files[1].name, "index.js");
+		});
+	});
 });
 
 describe("track()", () => {
