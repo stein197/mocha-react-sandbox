@@ -219,6 +219,7 @@ module.exports = class Sandbox {
 	 * @param {string} cmd
 	 * @param {any[]} args
 	 * @returns {this}
+	 * @private
 	 */
 	__addCmd(cmd, args) {
 		this.__cmdArray.push([cmd, args]);
