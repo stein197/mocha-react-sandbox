@@ -123,18 +123,20 @@ module.exports = class Sandbox {
 
 	/**
 	 * @param {string} selector
+	 * @param {boolean} atBody
 	 * @returns {ElementFacade?}
 	 */
-	find(selector) {
-		return new ElementFacade(this.__container).find(selector);
+	find(selector, atBody = false) {
+		return new ElementFacade(atBody ? this.__dom.window.document.body : this.__container).find(selector);
 	}
 
 	/**
 	 * @param {string} text
+	 * @param {boolean} atBody
 	 * @returns {ElementFacade?}
 	 */
-	findByText(text) {
-		return new ElementFacade(this.__container).findByText(text);
+	findByText(text, atBody = false) {
+		return new ElementFacade(atBody ? this.__dom.window.document.body : this.__container).findByText(text);
 	}
 
 	/**
