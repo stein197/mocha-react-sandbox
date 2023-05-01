@@ -71,6 +71,13 @@ module.exports = class Sandbox {
 	}
 
 	/**
+	 * @returns {jsdom.JSDOM}
+	 */
+	get dom() {
+		return this.__dom;
+	}
+
+	/**
 	 * @param {T} context
 	 */
 	constructor(context) {
