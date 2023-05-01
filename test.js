@@ -2,7 +2,6 @@ const assert = require("node:assert");
 const React = require("react");
 const sandbox = require(".");
 
-const setTimeout = globalThis.setTimeout;
 const timeout = (ms, result) => new Promise(resolve => setTimeout(() => resolve(result), ms));
 
 function Component1() {
