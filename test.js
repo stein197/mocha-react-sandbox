@@ -24,8 +24,8 @@ function Component3() {
 	return React.createElement("p", null, state);
 }
 
-sandbox.go(globalThis, sb => {
-	describe("go()", () => {
+sandbox.react(globalThis, sb => {
+	describe("react()", () => {
 		it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
 		it("do()", () => {
 			let a = 0;

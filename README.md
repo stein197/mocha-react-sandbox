@@ -15,7 +15,7 @@ import React from "react";
 import sandbox from "@stein197/test-sandbox";
 
 // Passing global context that will be mocked
-sandbox.go(globalThis, sb => {
+sandbox.react(globalThis, sb => {
 	function Component() {
 		const [count, setCount] = React.useState(0);
 		return (

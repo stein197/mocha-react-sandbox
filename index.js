@@ -7,7 +7,7 @@ const util = require("./src/util");
  * @param {(sb: Sandbox<T>) => void} cb
  * @returns {void}
  */
-exports.go = function go(context, cb) {
+exports.react = function react(context, cb) {
 	const sb = new Sandbox(context);
 	cb(sb);
 }
