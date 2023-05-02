@@ -1,14 +1,14 @@
-const Sandbox = require("./src/Sandbox");
+const ReactSandbox = require("./src/ReactSandbox");
 const util = require("./src/util");
 
 /**
  * @template {object} T
  * @param {T} context
- * @param {(sb: Sandbox<T>) => void} cb
+ * @param {(sb: ReactSandbox<T>) => void} cb
  * @returns {void}
  */
 exports.react = function react(context, cb) {
-	const sb = new Sandbox(context);
+	const sb = new ReactSandbox(context);
 	cb(sb);
 }
 

@@ -15,7 +15,7 @@ const util = require("./util");
 /**
  * @template T
  */
-module.exports = class Sandbox {
+module.exports = class ReactSandbox {
 
 	/**
 	 * @type {Mocker<T>}
