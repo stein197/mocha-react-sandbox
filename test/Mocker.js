@@ -5,6 +5,12 @@ describe("Mocker", () => {
 	let dummy = createDummy();
 	beforeEach(() => dummy = createDummy());
 
+	describe("Mocker.context", () => {
+		it("Should return original context object", () => {
+			const mocker = new Mocker(dummy);
+			assert.equal(mocker.context, dummy);
+		});
+	});
 	describe("Mocker.mock()", () => {
 		it("Should mock a property when it exists and the mocker is allowed to override existing properties", () => {
 			const mocker = new Mocker(dummy, false);
