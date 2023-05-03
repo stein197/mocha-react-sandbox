@@ -1,7 +1,6 @@
 const assert = require("node:assert");
 const Mocker = require("../src/Mocker");
 
-// TODO
 describe("Mocker", () => {
 	let dummy = createDummy();
 	beforeEach(() => dummy = createDummy());
@@ -23,12 +22,39 @@ describe("Mocker", () => {
 			assert.equal(dummy.prop1, 10);
 		});
 	});
-	// TODO
-	describe("Mocker.unmock()", () => {});
-	// TODO
-	describe("Mocker.getOriginal()", () => {});
-	// TODO
-	describe("Mocker.clean()", () => {});
+	describe("Mocker.unmock()", () => {
+		it("Should restore the original value when the mocker is allowed to override existing properties", () => {
+			const mocker = new Mocker(dummy, false);
+			mocker.mock("prop1", 20);
+			mocker.unmock("prop1");
+			assert.equal(dummy.prop1, 10);
+		});
+	});
+	describe("Mocker.getOriginal()", () => {
+		it("Should return the original value when a property is mocked", () => {
+			const mocker = new Mocker(dummy, false);
+			const original = dummy.func1;
+			mocker.mock("func1", (a, b) => a - b);
+			assert.equal(mocker.getOriginal("func1"), original);
+		});
+		it("Should return the original value when a property is unmocked", () => {
+			const mocker = new Mocker(dummy, false);
+			const original = dummy.func1;
+			assert.equal(mocker.getOriginal("func1"), original);
+		});
+	});
+	describe("Mocker.clean()", () => {
+		it("Should restore all values to original", () => {
+			const mocker = new Mocker(dummy, false);
+			const originalProp1 = dummy.prop1;
+			const oritinalFunc1 = dummy.func1;
+			mocker.mock("prop1", 20);
+			mocker.mock("func1", (a, b) => a - b);
+			mocker.clean();
+			assert.equal(dummy.prop1, originalProp1);
+			assert.equal(dummy.func1, oritinalFunc1);
+		});
+	});
 });
 
 function createDummy() {

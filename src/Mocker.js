@@ -25,6 +25,13 @@ module.exports = class Mocker {
 	__forbidExisting;
 
 	/**
+	 * @return {T}
+	 */
+	get context() {
+		return this.__context;
+	}
+
+	/**
 	 * @param {T} context
 	 * @param {boolean} forbidExisting
 	 */
