@@ -8,21 +8,31 @@ module.exports = class Mocker {
 
 	/**
 	 * @type {Partial<T>}
+	 * @readonly
 	 * @private
 	 */
 	__orig = {};
 
 	/**
 	 * @type {T}
+	 * @readonly
 	 * @private
 	 */
 	__context;
 
 	/**
 	 * @type {boolean}
+	 * @readonly
 	 * @private
 	 */
-	__forbidExisting;
+	__allowOverride;
+
+	/**
+	 * @type {string[]}
+	 * @readonly
+	 * @private
+	 */
+	__deleteableProps = [];
 
 	/**
 	 * @return {T}
@@ -33,27 +43,27 @@ module.exports = class Mocker {
 
 	/**
 	 * @param {T} context
-	 * @param {boolean} forbidExisting
+	 * @param {boolean} allowOverride
 	 */
-	constructor(context, forbidExisting = true) {
+	constructor(context, allowOverride = false) {
 		this.__context = context;
-		this.__forbidExisting = forbidExisting
+		this.__allowOverride = allowOverride;
 	}
 
 	/**
 	 * @param {K} key
-	 * @param {T[K]} implementation
+	 * @param {T[K]} impl
 	 * @returns {void}
 	 */
-	mock(key, implementation) {
-		if (this.__forbidExisting && key in this.__context)
+	mock(key, impl) {
+		if (!this.__isOverrideable(key))
 			return;
-		if (!(key in this.__orig))
-			this.__orig[key] = this.__context[key];
 		try {
-			this.__context[key] = implementation;
+			this.__trySaveDeleteable(key);
+			this.__trySaveOriginal(key);
+			this.__context[key] = impl;
 		} catch {
-			delete this.__orig[key];
+			this.__restore(key);
 		}
 	}
 
@@ -62,14 +72,9 @@ module.exports = class Mocker {
 	 * @returns {void}
 	 */
 	unmock(key) {
-		if (!(key in this.__orig) || this.__forbidExisting && key in this.__context)
+		if (!this.__isOverrideable(key))
 			return;
-		try {
-			// @ts-ignore
-			this.__context[key] = this.__orig[key];
-		} finally {
-			delete this.__orig[key];
-		}
+		this.__restore(key);
 	}
 
 	/**
@@ -80,10 +85,51 @@ module.exports = class Mocker {
 		return this.__orig[key] ?? this.__context[key] ?? null;
 	}
 
+	/**
+	 * @returns {void}
+	 */
 	clean() {
-		const keys = Object.keys(this.__orig);
-		for (const key of keys)
-			// @ts-ignore
+		for (const key in this.__orig)
 			this.unmock(key);
+	}
+
+	/**
+	 * @param {K} key
+	 * @returns {boolean}
+	 * @private
+	 */
+	__isOverrideable(key) {
+		return this.__allowOverride || !(key in this.__context) && !(key in this.__orig) || key in this.__orig;
+	}
+
+	/**
+	 * @param {K} key
+	 * @returns {void}
+	 * @private
+	 */
+	__trySaveOriginal(key) {
+		if (!(key in this.__orig))
+			this.__orig[key] = this.__context[key];
+	}
+	
+	/**
+	 * @param {K} key 
+	 * @returns {void}
+	 * @private
+	 */
+	__trySaveDeleteable(key) {
+		if (!(key in this.__context) && !(key in this.__orig) && !this.__deleteableProps.includes(key))
+			this.__deleteableProps.push(key);
+	}
+
+	__restore(key) {
+		const keyIndex = this.__deleteableProps.indexOf(key);
+		if (keyIndex >= 0) {
+			this.__deleteableProps.splice(keyIndex, 1);
+			delete this.__context[key];
+		} else if (key in this.__context) {
+			this.__context[key] = this.__orig[key];
+			delete this.__orig[key];
+		}
 	}
 }
