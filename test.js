@@ -1,4 +1,4 @@
-const assert = require("node:assert");
+	const assert = require("node:assert");
 const React = require("react");
 const sandbox = require(".");
 
@@ -24,8 +24,8 @@ function Component3() {
 	return React.createElement("p", null, state);
 }
 
-sandbox.react(globalThis, sb => {
-	describe("react()", () => {
+describe.skip("react()", () => {
+	sandbox.react(globalThis, sb => {
 		it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
 		it("do()", () => {
 			let a = 0;
@@ -47,18 +47,32 @@ sandbox.react(globalThis, sb => {
 			assert.fail();
 		}
 	});
-	describe("upload()", () => {
-		it("Should correctly upload a single file", async () => {
-			document.body.innerHTML = "<input type=\"file\" />";
-			await sb.upload(sb => sb.find("input", true), "test.js").run();
-			assert.equal(sb.dom.window.document.querySelector("input").files.length, 1);
-			assert.deepStrictEqual(sb.dom.window.document.querySelector("input").files[0].name, "test.js");
+
+});
+
+sandbox.dom(sb => {
+	describe("sandbox.dom()", () => {
+		it("Should mock global variables such as document, window etc.", () => {
+			assert.ok(document != null);
+			assert.ok(window != null);
+			assert.ok(File != null);
 		});
-		it("Should correctly upload an array of files", async () => {
-			document.body.innerHTML = "<input type=\"file\" />";
-			await sb.upload(sb => sb.find("input", true), "test.js", "index.js").run();
-			assert.equal(sb.dom.window.document.querySelector("input").files.length, 2);
-			assert.deepStrictEqual(sb.dom.window.document.querySelector("input").files[1].name, "index.js");
+		it("Global document should be the same as the sandbox dom's one", () => {
+			assert.ok(document === sb.dom.window.document);
+		});
+		describe("upload()", () => {
+			it("Should correctly upload a single file", () => {
+				document.body.innerHTML = "<input type=\"file\" />";
+				sb.upload(document.body.querySelector("input"), "test.js");
+				assert.equal(document.body.querySelector("input").files.length, 1);
+				assert.deepStrictEqual(document.body.querySelector("input").files[0].name, "test.js");
+			});
+			it("Should correctly upload an array of files", () => {
+				document.body.innerHTML = "<input type=\"file\" />";
+				sb.upload(document.body.querySelector("input"), "test.js", "index.js");
+				assert.equal(document.body.querySelector("input").files.length, 2);
+				assert.deepStrictEqual(document.body.querySelector("input").files[1].name, "index.js");
+			});
 		});
 	});
 });

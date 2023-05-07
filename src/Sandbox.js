@@ -1,5 +1,6 @@
 // @ts-check
 const jsdom = require("jsdom");
+const mocha = require("mocha");
 const SandboxFacade = require("./SandboxFacade");
 const Mocker = require("./Mocker");
 
@@ -61,15 +62,19 @@ module.exports = class Sandbox {
 		});
 		this.__contextProps = Object.getOwnPropertyNames(this.__dom.window);
 		this.__facade = new SandboxFacade(this);
+		mocha.before(this.__before);
+		mocha.after(this.__after);
 	}
 
 	/**
-	 * @param {(sb: SandboxFacade<T>) => void} f
-	 * @returns {void}
+	 * @param {(sb: SandboxFacade<T>) => void | Promise<void>} f
+	 * @returns {Promise<void>}
 	 */
-	run(f) {
+	async run(f) {
 		this.__setup();
-		f(this.__facade);
+		const result = f(this.__facade);
+		if (result instanceof Promise)
+			await result;
 		this.__teardown();
 	}
 
@@ -89,5 +94,23 @@ module.exports = class Sandbox {
 	 */
 	__teardown() {
 		this.__mocker.clean();
+	}
+
+	/**
+	 * @readonly
+	 * @private
+	 * @returns {void}
+	 */
+	__before = () => {
+		this.__setup();
+	}
+
+	/**
+	 * @readonly
+	 * @private
+	 * @returns {void}
+	 */
+	__after = () => {
+		this.__teardown();
 	}
 }

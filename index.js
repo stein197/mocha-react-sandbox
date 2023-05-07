@@ -14,15 +14,12 @@ exports.react = function react(context, cb) {
 	cb(sb);
 }
 
-// TODO: Tests
 /**
- * @template {object} T
- * @param {T} context
- * @param {(sb: SandboxFacade)} cb
+ * @param {(sb: SandboxFacade<typeof globalThis>)} cb
  * @returns {void}
  */
-exports.dom = function dom(context, cb) {
-	const sandbox = new Sandbox(context);
+exports.dom = function dom(cb) {
+	const sandbox = new Sandbox(globalThis);
 	sandbox.run(cb);
 }
 
