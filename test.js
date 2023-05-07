@@ -77,7 +77,7 @@ sandbox.dom(sb => {
 	});
 });
 
-describe("track()", () => {
+describe("sandbox.track()", () => {
 	it("Should correctly track the number of calls", () => {
 		const track = sandbox.track(() => {});
 		assert.equal(track.calls, 0);
