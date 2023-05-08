@@ -3,6 +3,7 @@
 module.exports = class ElementFacade {
 
 	/**
+	 * @readonly
 	 * @type {HTMLElement}
 	 * @private
 	 */
@@ -29,6 +30,9 @@ module.exports = class ElementFacade {
 		return this.__element.innerHTML;
 	}
 
+	/**
+	 * @param {HTMLElement} element
+	 */
 	constructor(element) {
 		this.__element = element;
 	}
