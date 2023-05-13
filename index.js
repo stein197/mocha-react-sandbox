@@ -1,26 +1,26 @@
+// @ts-check
 const ReactSandbox = require("./src/ReactSandbox");
+const ReactSandboxFacade = require("./src/ReactSandboxFacade");
 const Sandbox = require("./src/Sandbox");
 const SandboxFacade = require("./src/SandboxFacade");
 const util = require("./src/util");
 
 /**
- * @template {object} T
- * @param {T} context
- * @param {(sb: ReactSandbox<T>) => void} cb
- * @returns {void}
+ * @param {(sb: ReactSandboxFacade<typeof globalThis>) => void} cb
+ * @returns {Promise<void>}
  */
-exports.react = function react(context, cb) {
-	const sb = new ReactSandbox(context);
-	cb(sb);
+exports.react = function react(cb) {
+	const sandbox = new ReactSandbox(globalThis);
+	return sandbox.run(cb);
 }
 
 /**
- * @param {(sb: SandboxFacade<typeof globalThis>)} cb
- * @returns {void}
+ * @param {(sb: SandboxFacade<typeof globalThis>) => void} cb
+ * @returns {Promise<void>}
  */
 exports.dom = function dom(cb) {
 	const sandbox = new Sandbox(globalThis);
-	sandbox.run(cb);
+	return sandbox.run(cb);
 }
 
 exports.track = util.track;

@@ -1,33 +1,15 @@
 // @ts-check
-const assert = require("node:assert");
-const fs = require("node:fs");
-const path = require("node:path");
-const mocha = require("mocha");
 const jsdom = require("jsdom");
-const React = require("react");
-const mimeTypes = require("mime-types");
+const mocha = require("mocha");
 const ReactDOMClient = require("react-dom/client");
 const ReactDOMTestUtils = require("react-dom/test-utils");
 const Mocker = require("./Mocker");
-const ElementFacade = require("./ElementFacade");
-const util = require("./util");
+const ReactSandboxFacade = require("./ReactSandboxFacade");
 
 /**
  * @template T
  */
 module.exports = class ReactSandbox {
-
-	/**
-	 * @type {Mocker<T>}
-	 * @private
-	 */
-	__mocker;
-
-	/**
-	 * @type {HTMLDivElement}
-	 * @private
-	 */
-	__container;
 
 	/**
 	 * @type {ReactDOMClient.Root?}
@@ -36,41 +18,59 @@ module.exports = class ReactSandbox {
 	__root;
 
 	/**
+	 * @readonly
+	 * @type {HTMLDivElement}
+	 * @private
+	 */
+	__container;
+
+	/**
+	 * @readonly
 	 * @type {T}
 	 * @private
 	 */
 	__context;
 
 	/**
-	 * @type {jsdom.JSDOM}
-	 * @private
-	 */
-	__dom;
-
-	/**
+	 * @readonly
 	 * @type {string[]}
 	 * @private
 	 */
 	__contextProps;
 
 	/**
-	 * @type {[name: string, args: any[]][]}
+	 * @readonly
+	 * @type {ReactSandboxFacade<T>}
 	 * @private
 	 */
-	__cmdArray = [];
+	__facade;
 
 	/**
-	 * @returns {string}
+	 * @type {Mocker<T>}
+	 * @readonly
+	 * @private
 	 */
-	get textContent() {
-		return this.__container.textContent ?? "";
+	__mocker;
+
+	/**
+	 * @type {jsdom.JSDOM}
+	 * @readonly
+	 * @private
+	 */
+	__dom;
+
+	/**
+	 * @returns {ReactDOMClient.Root?}
+	 */
+	get root() {
+		return this.__root;
 	}
 
 	/**
-	 * @returns {string}
+	 * @returns {HTMLDivElement}
 	 */
-	get innerHTML() {
-		return this.__container.innerHTML;
+	get container() {
+		return this.__container;
 	}
 
 	/**
@@ -85,13 +85,13 @@ module.exports = class ReactSandbox {
 	 */
 	constructor(context) {
 		this.__context = context;
-		this.__mocker = new Mocker(context);
+		this.__mocker = new Mocker(this.__context);
 		this.__dom = new jsdom.JSDOM("", {
-			url: "http://localhost"
+			url: "https://localhost"
 		});
-		this.__container = this.__dom.window.document.createElement("div");
-		this.__dom.window.document.body.appendChild(this.__container);
 		this.__contextProps = Object.getOwnPropertyNames(this.__dom.window);
+		this.__container = this.__dom.window.document.createElement("div");
+		this.__facade = new ReactSandboxFacade(this);
 		mocha.before(this.__before);
 		mocha.after(this.__after);
 		mocha.beforeEach(this.__beforeEach);
@@ -99,189 +99,34 @@ module.exports = class ReactSandbox {
 	}
 
 	/**
-	 * @param {Promise<any>} promise
-	 * @returns {this}
+	 * @param {(sb: ReactSandboxFacade<T>) => void | Promise<void>} f
+	 * @returns {Promise<void>}
 	 */
-	await(promise) {
-		return this.__addCmd("await", [promise]);
+	async run(f) {
+		this.__setup();
+		const result = f(this.__facade);
+		if (result instanceof Promise)
+			await result;
+		this.__teardown();
 	}
 
 	/**
-	 * @param {() => void | Promise<void>} f
-	 * @returns {this}
-	 */
-	do(f) {
-		return this.__addCmd("do", [f]);
-	}
-
-	/**
-	 * @template T
-	 * @param {(sandbox: this) => T} f
-	 * @param {T} actual
-	 * @returns {this}
-	 */
-	equals(f, actual) {
-		return this.__addCmd("equals", [f, actual]);
-	}
-
-	/**
-	 * @param {string} selector
-	 * @param {boolean} atBody
-	 * @returns {ElementFacade?}
-	 */
-	find(selector, atBody = false) {
-		return new ElementFacade(atBody ? this.__dom.window.document.body : this.__container).find(selector);
-	}
-
-	/**
-	 * @param {string} text
-	 * @param {boolean} atBody
-	 * @returns {ElementFacade?}
-	 */
-	findByText(text, atBody = false) {
-		return new ElementFacade(atBody ? this.__dom.window.document.body : this.__container).findByText(text);
-	}
-
-	/**
-	 * @param {React.ReactNode} node
-	 * @returns {this}
-	 */
-	render(node) {
-		return this.__addCmd("render", [node]);
-	}
-
-	/**
-	 * @param {number} count
-	 * @returns {this}
-	 */
-	rerenders(count) {
-		return this.__addCmd("rerenders", [count]);
-	}
-
-	/**
-	 * @param {(sandbox: this) => ElementFacade} f
-	 * @param {keyof typeof ReactDOMTestUtils.Simulate} event
-	 * @param {ReactDOMTestUtils.SyntheticEventData} [data]
-	 * @returns {this}
-	 */
-	simulate(f, event, data) {
-		return this.__addCmd("simulate", [f, event, data]);
-	}
-
-	/**
-	 * @param {number} ms
-	 * @returns {this}
-	 */
-	timeout(ms) {
-		// @ts-ignore
-		const setTimeout = this.__mocker.getOriginal("setTimeout") ?? this.__context.setTimeout;
-		return this.await(new Promise(resolve => setTimeout(resolve, ms)));
-	}
-
-	/**
-	 * @param {(sandbox: this) => ElementFacade} f
-	 * @param {string[]} paths
-	 * @returns {this}
-	 */
-	upload(f, ...paths) {
-		return this.__addCmd("upload", [f, paths]);
-	}
-
-	async run() {
-		let tracker;
-		for (let i = 0; i < this.__cmdArray.length; i++) {
-			const [cmd, args] = this.__cmdArray[i];
-			switch (cmd) {
-				case "await": {
-					const [promise] = args;
-					await ReactDOMTestUtils.act(() => promise.then(() => {}).catch(() => {}));
-					break;
-				}
-				case "do": {
-					const [f] = args;
-					await ReactDOMTestUtils.act(f);
-					break;
-				}
-				case "equals": {
-					const [f, actual] = args;
-					assert.equal(f(this), actual);
-					break;
-				}
-				case "render": {
-					const [node] = args;
-					const nodeType = node.type;
-					tracker = util.track(nodeType);
-					ReactDOMTestUtils.act(() => {
-						if (!this.__root)
-							return;
-						this.__root.render(React.createElement(tracker.f, node.props));
-					});
-					break;
-				}
-				case "rerenders": {
-					if (!tracker)
-						continue;
-					const [count] = args;
-					assert.equal(tracker.calls, count, `Expected rerenders: ${count}, actual: ${tracker.calls}`);
-					break;
-				}
-				case "simulate": {
-					const [f, event, data] = args;
-					ReactDOMTestUtils.act(() => {
-						ReactDOMTestUtils.Simulate[event](f(this).element, data);
-					});
-					break;
-				}
-				case "upload": {
-					const [f, paths] = args;
-					const facade = f(this);
-					if (!facade)
-						continue;
-					const input = facade.element;
-					const fileList = [];
-					for (const p of paths) {
-						const stat = fs.statSync(p);
-						fileList.push(new this.__dom.window.File([fs.readFileSync(p)], path.basename(p), {
-							lastModified: stat.mtimeMs,
-							type: mimeTypes.lookup(p) || ""
-						}));
-					}
-					Object.setPrototypeOf(fileList, this.__dom.window.FileList.prototype);
-					Object.defineProperty(input, "files", {
-						value: fileList
-					});
-					input.dispatchEvent(new this.__dom.window.Event("change"));
-					break;
-				}
-			}
-		}
-	}
-
-	/**
-	 * @param {string} cmd
-	 * @param {any[]} args
-	 * @returns {this}
+	 * @returns {void}
 	 * @private
 	 */
-	__addCmd(cmd, args) {
-		this.__cmdArray.push([cmd, args]);
-		return this;
-	}
-
-	/**
-	 * @private
-	 */
-	__beforeEach = () => {
+	__mountRoot() {
+		if (this.__root)
+			return;
 		ReactDOMTestUtils.act(() => {
 			this.__root = ReactDOMClient.createRoot(this.__container);
 		});
 	}
 
 	/**
+	 * @returns {void}
 	 * @private
 	 */
-	__afterEach = async () => {
-		this.__cmdArray = [];
+	__unmountRoot() {
 		ReactDOMTestUtils.act(() => {
 			if (!this.__root)
 				return;
@@ -291,24 +136,56 @@ module.exports = class ReactSandbox {
 	}
 
 	/**
+	 * @returns {void}
 	 * @private
 	 */
-	__before = () => {
-		// @ts-ignore
-		this.__context.IS_REACT_ACT_ENVIRONMENT = true
-		// @ts-ignore
+	__setup() {
+		this.__context.IS_REACT_ACT_ENVIRONMENT = true;
 		this.__mocker.mock("window", this.__dom.window);
 		for (const key of this.__contextProps)
 			this.__mocker.mock(key, this.__dom.window[key]);
+		this.__mountRoot();
 	}
 
 	/**
+	 * @returns {void}
+	 * @private
+	 */
+	__teardown() {
+		this.__unmountRoot();
+		this.__mocker.clean();
+		delete this.__context.IS_REACT_ACT_ENVIRONMENT;
+	}
+
+	/**
+	 * @readonly
+	 * @private
+	 */
+	__beforeEach = () => {
+		this.__mountRoot();
+	}
+
+	/**
+	 * @readonly
+	 * @private
+	 */
+	__afterEach = () => {
+		this.__unmountRoot();
+	}
+
+	/**
+	 * @readonly
+	 * @private
+	 */
+	__before = () => {
+		this.__setup();
+	}
+
+	/**
+	 * @readonly
 	 * @private
 	 */
 	__after = () => {
-		this.__root = null;
-		this.__mocker.clean();
-		// @ts-ignore
-		delete this.__context.IS_REACT_ACT_ENVIRONMENT;
+		this.__teardown();
 	}
 }
