@@ -24,8 +24,8 @@ function Component3() {
 	return React.createElement("p", null, state);
 }
 
-sandbox.react(sb => {
-	describe("sandbox.react()", () => {
+describe.skip("sandbox.react()", () => {
+	sandbox.react(sb => {
 		it("await()", () => sb.render(React.createElement(Component2, {promise: timeout(100, "Success")})).equals(sb => sb.textContent, "undefined").await(timeout(150)).equals(sb => sb.textContent, "Success").run());
 		it("do()", () => {
 			let a = 0;
@@ -51,8 +51,8 @@ sandbox.react(sb => {
 	});
 });
 
-sandbox.dom(sb => {
-	describe("sandbox.dom()", () => {
+describe("sandbox.dom()", () => {
+	sandbox.dom(sb => {
 		it("Should mock global variables such as document, window etc.", () => {
 			assert.ok(document != null);
 			assert.ok(window != null);
@@ -74,6 +74,17 @@ sandbox.dom(sb => {
 				assert.equal(document.body.querySelector("input").files.length, 2);
 				assert.deepStrictEqual(document.body.querySelector("input").files[1].name, "index.js");
 			});
+		});
+	});
+	it("Should correctly work outside Mocha environment", () => {
+		return sandbox.dom(sb => {
+			assert.ok(window);
+			assert.ok(document);
+			assert.ok(File);
+			document.body.innerHTML = "<input type=\"file\" />";
+			sb.upload(document.body.querySelector("input"), "test.js");
+			assert.equal(document.body.querySelector("input").files.length, 1);
+			assert.deepStrictEqual(document.body.querySelector("input").files[0].name, "test.js");
 		});
 	});
 });

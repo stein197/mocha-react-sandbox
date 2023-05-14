@@ -45,6 +45,12 @@ module.exports = class Sandbox {
 	__facade;
 
 	/**
+	 * @type {boolean}
+	 * @private
+	 */
+	__active = false;
+
+	/**
 	 * @returns {jsdom.JSDOM}
 	 */
 	get dom() {
@@ -83,6 +89,9 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__setup() {
+		if (this.__active)
+			return;
+		this.__active = true;
 		this.__mocker.mock("window", this.__dom.window);
 		for (const key of this.__contextProps)
 			this.__mocker.mock(key, this.__dom.window[key]);
@@ -93,7 +102,10 @@ module.exports = class Sandbox {
 	 * @private
 	 */
 	__teardown() {
+		if (!this.__active)
+			return;
 		this.__mocker.clean();
+		this.__active = false;
 	}
 
 	/**
