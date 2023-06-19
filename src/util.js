@@ -4,7 +4,6 @@
  * @param {(...args: T) => U} f
  * @returns {{
  * 	readonly info: [args: T, result: U][];
- * 	readonly calls: number;
  * 	readonly f(...args: T): U;
  * }}
  */
@@ -13,9 +12,6 @@ exports.track = function track(f) {
 	return {
 		get info() {
 			return info;
-		},
-		get calls() {
-			return info.length;
 		},
 		f(...args) {
 			const result = f(...args);
