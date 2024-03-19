@@ -3,7 +3,6 @@ const ReactSandbox = require("./src/ReactSandbox");
 const ReactSandboxFacade = require("./src/ReactSandboxFacade");
 const Sandbox = require("./src/Sandbox");
 const SandboxFacade = require("./src/SandboxFacade");
-const util = require("./src/util");
 
 /**
  * @param {(sb: ReactSandboxFacade<typeof globalThis>) => void} cb
@@ -22,5 +21,3 @@ exports.dom = function dom(cb) {
 	const sandbox = new Sandbox(globalThis);
 	return sandbox.run(cb);
 }
-
-exports.track = util.track;

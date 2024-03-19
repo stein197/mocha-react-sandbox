@@ -88,32 +88,3 @@ describe("sandbox.dom()", () => {
 		});
 	});
 });
-
-describe("sandbox.track()", () => {
-	it("Should correctly track the number of calls", () => {
-		const track = sandbox.track(() => {});
-		assert.equal(track.calls, 0);
-		track.f();
-		assert.equal(track.calls, 1);
-		track.f();
-		track.f();
-		assert.equal(track.calls, 3);
-	});
-	it("Should correctly record all calls", () => {
-		const f = (a, b) => a + b;
-		const track = sandbox.track(f);
-		track.f(1, 2);
-		track.f(3, 4);
-		track.f(5, 6);
-		assert.deepStrictEqual(track.info, [
-			[[1, 2], 3],
-			[[3, 4], 7],
-			[[5, 6], 11],
-		]);
-	});
-	it("Tracked function should do exactly the same as the original function", () => {
-		const f = (a, b) => a + b;
-		const track = sandbox.track(f);
-		assert.equal(track.f(1, 2), 3);
-	});
-});

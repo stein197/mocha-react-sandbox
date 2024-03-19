@@ -3,9 +3,9 @@ const assert = require("node:assert");
 const jsdom = require("jsdom");
 const React = require("react");
 const ReactDOMTestUtils = require("react-dom/test-utils");
+const util = require("@stein197/util/util");
 const ReactSandbox = require("./ReactSandbox");
 const ElementFacade = require("./ElementFacade");
-const util = require("./util");
 
 /**
  * @template {object} T
@@ -147,7 +147,7 @@ module.exports = class ReactSandboxFacade {
 					ReactDOMTestUtils.act(() => {
 						if (!this.__sandbox.root)
 							return;
-						this.__sandbox.root.render(React.createElement(tracker.f, node.props));
+						this.__sandbox.root.render(React.createElement(tracker, node.props));
 					});
 					break;
 				}
@@ -155,7 +155,7 @@ module.exports = class ReactSandboxFacade {
 					if (!tracker)
 						continue;
 					const [count] = args;
-					assert.equal(tracker.calls, count, `Expected rerenders: ${count}, actual: ${tracker.calls}`);
+					assert.equal(tracker.data.length, count, `Expected rerenders: ${count}, actual: ${tracker.data.length}`);
 					break;
 				}
 				case "simulate": {
