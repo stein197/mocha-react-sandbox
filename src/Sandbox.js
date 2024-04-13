@@ -1,8 +1,10 @@
 // @ts-check
+const test = require("node:test");
 const jsdom = require("jsdom");
-const mocha = require("mocha");
-const SandboxFacade = require("./SandboxFacade");
 const Mocker = require("./Mocker");
+const ReactContext = require("./react/ReactContext");
+const ReactRenderer = require("./react/ReactRenderer");
+const {HOOK_AFTER} = require("./util");
 
 /**
  * @template {object} T
@@ -10,45 +12,46 @@ const Mocker = require("./Mocker");
 module.exports = class Sandbox {
 
 	/**
-	 * @type {Mocker<T>}
-	 * @readonly
 	 * @private
+	 * @readonly
+	 * @type {Sandbox<T>[]}
 	 */
-	__mocker;
+	static pool = [];
 
 	/**
-	 * @type {T}
-	 * @readonly
 	 * @private
+	 * @readonly
+	 * @type {T}
 	 */
 	__context;
 
 	/**
-	 * @type {jsdom.JSDOM}
-	 * @readonly
 	 * @private
-	 */
-	__dom;
-
-	/**
+	 * @readonly
 	 * @type {string[]}
-	 * @readonly
-	 * @private
 	 */
 	__contextProps;
 
 	/**
-	 * @type {SandboxFacade<T>}
-	 * @readonly
 	 * @private
+	 * @readonly
+	 * @type {jsdom.JSDOM}
 	 */
-	__facade;
+	__dom;
 
 	/**
-	 * @type {boolean}
 	 * @private
+	 * @readonly
+	 * @type {(() => void)[]}
 	 */
-	__active = false;
+	__listeners = [];
+
+	/**
+	 * @private
+	 * @readonly
+	 * @type {Mocker<T>}
+	 */
+	__mocker;
 
 	/**
 	 * @returns {jsdom.JSDOM}
@@ -67,62 +70,62 @@ module.exports = class Sandbox {
 			url: "https://localhost/"
 		});
 		this.__contextProps = Object.getOwnPropertyNames(this.__dom.window);
-		this.__facade = new SandboxFacade(this);
-		mocha.before(this.__before);
-		mocha.after(this.__after);
+		test.before(this.__before);
+		test.after(this.__after);
 	}
 
 	/**
-	 * @param {(sb: SandboxFacade<T>) => void | Promise<void>} f
+	 * @param {(renderer: ReactRenderer) => void} f
 	 * @returns {Promise<void>}
 	 */
-	async run(f) {
-		this.__setup();
-		const result = f(this.__facade);
-		if (result instanceof Promise)
-			await result;
-		this.__teardown();
+	react(f) {
+		return new ReactContext(this.__context).run(f);
 	}
 
 	/**
-	 * @returns {void}
-	 * @private
+	 * @param {() => void} f
 	 */
-	__setup() {
-		if (this.__active)
-			return;
-		this.__active = true;
-		this.__mocker.mock("window", this.__dom.window);
-		for (const key of this.__contextProps)
-			this.__mocker.mock(key, this.__dom.window[key]);
+	[HOOK_AFTER](f) {
+		if (this.__listeners.indexOf(f) < 0)
+			this.__listeners.push(f);
 	}
 
 	/**
 	 * @returns {void}
 	 * @private
-	 */
-	__teardown() {
-		if (!this.__active)
-			return;
-		this.__mocker.clean();
-		this.__active = false;
-	}
-
-	/**
-	 * @readonly
-	 * @private
-	 * @returns {void}
-	 */
-	__before = () => {
-		this.__setup();
-	}
-
-	/**
-	 * @readonly
-	 * @private
-	 * @returns {void}
 	 */
 	__after = () => {
-		this.__teardown();
+		this.__mocker.clean();
+		this.__unregister();
+		this.__listeners.forEach(listener => listener());
+		this.__listeners.length = 0;
+	};
+
+	/**
+	 * @returns {void}
+	 * @private
+	 */
+	__before = () => {
+		if (this.__isRegistered())
+			throw new Error("The current context is already registered. Unregister it first");
+		this.__register();
+		this.__mocker.mock("window", this.__dom.window); // TODO: Isn't this redundant?
+		for (const key of this.__contextProps)
+			this.__mocker.mock(key, this.__dom.window[key]);
+	};
+
+	/**
+	 * @returns {boolean}
+	 */
+	__isRegistered() {
+		return this.constructor.pool.indexOf(this) >= 0;
+	}
+
+	__register() {
+		this.constructor.pool.push(this);
+	}
+
+	__unregister() {
+		this.constructor.pool.splice(this.constructor.pool.indexOf(this), 1);
 	}
 }

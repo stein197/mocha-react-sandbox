@@ -4,7 +4,7 @@
   "description": "Test sandbox helper",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js test/*.js"
+    "test": "node --test test.js test/*.js"
   },
   "repository": {
     "type": "git",
@@ -22,18 +22,12 @@
   "homepage": "https://github.com/stein197/js-test-sandbox#readme",
   "dependencies": {
     "@stein197/util": "^2.5.0",
-    "@types/react-dom": "^18.0.11",
-    "jsdom": "^21.1.1",
-    "mime-types": "^2.1.35",
-    "react-dom": "^18.2.0"
+    "jsdom": "^21.1.1"
   },
   "peerDependencies": {
-    "@types/mocha": "^10.0.1",
     "@types/react": "^18.0.28",
-    "mocha": "^10.2.0",
-    "react": "^18.2.0"
-  },
-  "devDependencies": {
-    "mocha": "^10.2.0"
+    "@types/react-dom": "^18.0.11",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

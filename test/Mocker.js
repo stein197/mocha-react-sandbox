@@ -1,5 +1,6 @@
 // @ts-check
 const assert = require("node:assert");
+const {beforeEach, describe, it} = require("node:test");
 const Mocker = require("../src/Mocker");
 
 describe("Mocker", () => {

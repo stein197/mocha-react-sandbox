@@ -1,5 +1,6 @@
 // @ts-check
 const assert = require("node:assert");
+const {beforeEach, describe, it} = require("node:test");
 const jsdom = require("jsdom");
 const ElementFacade = require("../src/ElementFacade");
 
